@@ -1,0 +1,78 @@
+package edu.a1.system.auth;
+
+import edu.a1.system.User;
+
+/**
+ * The SystemAuthenticator stores and handles the system's
+ * authentication state.
+ * 
+ * @author Guanyuming He
+ */
+public final class SystemAuthenticator {
+    private User loggedInUser;
+
+    /**
+     * Initial state: no user is logged in.
+     */
+    public SystemAuthenticator() {
+        loggedInUser = null;
+    }
+
+    /** @return the logged in user, or null if not logged in */
+    public User getLoggedInUser() { return loggedInUser; }
+
+    /** @return true iff a user is logged in */
+    public boolean loggedIn() { return getLoggedInUser() != null; }
+
+    /** @return true if admin is logged in */
+    public boolean isAdmin() { return loggedIn() && getLoggedInUser().getUsername().equals("admin"); }
+
+    /** @return true if a normal reader is logged in */
+    public boolean isReader() { return loggedIn() && !getLoggedInUser().getUsername().equals("admin"); }
+
+    /**
+     * Log a user in.
+     * Precondition:
+     *  1. No user is logged in
+     *  2. username exists
+     *  3. password is correct
+     * Postcondition:
+     *  user with that username is logged in.
+     *      In particular, the reader context should be set if a reader has logged in.
+     *  If `username = admin`, then the administrator is logged in
+     * 
+     * @param username
+     * @param password
+     */
+    public void login(String username, String password) {
+        throw new RuntimeException("Not implemented.");
+    }
+
+    /**
+     * Log the user out.
+     * Precondition:
+     *  a user is logged in.
+     * Postcondition
+     *  the user is logged out.
+     */
+    public void logout() {
+        throw new RuntimeException("Not implemented.");
+    }
+
+    /**
+     * Changes the currently logged in user's password
+     * Precondition:
+     *  1. a user is logged in
+     *  2. new password != old password.
+     *  3. the new password is approved based on a `PwdChangeStrategy` 
+     *  (Naturally, we might require that the admin MUST have a strong password, but for normal users we might allow weaker ones for convenience.)
+     * Postcondition:
+     *  1. the password for that user is reset to new password.
+     *  2. the user is logged out. You must log in again.
+     * 
+     * @param newPassword
+     */
+    public void changePassword(String newPassword) {
+        throw new RuntimeException("Not implemented.");
+    }
+}
