@@ -10,6 +10,8 @@ import edu.a1.system.LibrarySystem;
  */
 public class ExitCommand implements Command {
 
+    public static final String name = "exit";
+
     @Override
     public void handle(List<String> arguments) {
         LibrarySystem.exit();
@@ -18,7 +20,7 @@ public class ExitCommand implements Command {
     @Override
     public String helpMessage() {
         return Command.generateHelpMessage(
-            "exit", "exits the system", 
+            name, "exits the system", 
             List.of(), List.of()
         );
     }

@@ -11,14 +11,15 @@ public class ReaderPwdChangeStrategy implements PwdChangeStrategy {
 
     @Override
     public boolean approveNewPassword(User usr, String pwd) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'approveNewPassword'");
+        assert(!usr.getUsername().equals("admin"));
+
+        // A reader's password must be at least 6 characters long.
+        return pwd.length() >= 6;
     }
 
     @Override
-    public String getPasswordPolicy(User usr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPasswordPolicy'");
+    public String getPasswordPolicy() {
+        return "A reader's password must be at least 6 characters long.";
     }
     
 }

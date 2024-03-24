@@ -12,6 +12,12 @@ public final class User {
     private String username;
     private String pwd;
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
     public String getUsername() {
         return username;
     }

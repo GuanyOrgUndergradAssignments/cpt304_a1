@@ -1,5 +1,6 @@
 package edu.a1.system.auth;
 
+import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 
 /**
@@ -45,7 +46,23 @@ public final class SystemAuthenticator {
      * @param password
      */
     public void login(String username, String password) {
-        throw new RuntimeException("Not implemented.");
+
+        if(loggedIn()) {
+            throw new IllegalStateException("already logged in.");
+        }
+     
+        // check username and password.
+        User usr = LibrarySystem.userStorage.findByUsername(username);
+        if(usr == null) {
+            throw new IllegalArgumentException("username or password is incorrect.");
+        }
+        if(!usr.getPwd().equals(password)) {
+            throw new IllegalArgumentException("username or password is incorrect.");
+        }
+
+        // success
+        loggedInUser = usr;
+
     }
 
     /**
@@ -56,7 +73,13 @@ public final class SystemAuthenticator {
      *  the user is logged out.
      */
     public void logout() {
-        throw new RuntimeException("Not implemented.");
+
+        if(!loggedIn()) {
+            throw new IllegalStateException("not logged in.");
+        }
+
+        // success.
+        loggedInUser = null;
     }
 
     /**
@@ -73,6 +96,32 @@ public final class SystemAuthenticator {
      * @param newPassword
      */
     public void changePassword(String newPassword) {
-        throw new RuntimeException("Not implemented.");
+        
+        // create the strategy based on the logged in user at runtime.
+        // If none is logged in, then it will remain null.
+        PwdChangeStrategy strategy = null;
+        if(isAdmin()) {
+            strategy = new AdminPwdChangeStrategy();
+        }
+        else if(isReader()) {
+            strategy = new ReaderPwdChangeStrategy();
+        }
+
+        if(strategy == null) {
+            throw new IllegalStateException("Not logged in.");
+        }
+
+        if(!strategy.approveNewPassword(loggedInUser, newPassword)) {
+            // failure
+            throw new IllegalArgumentException(strategy.getPasswordPolicy());
+        }
+
+        // success
+        // change the password and replace the user in the database.
+        loggedInUser.setPwd(newPassword);
+        LibrarySystem.userStorage.replace(loggedInUser);
+        // log out
+        loggedInUser = null;
+        
     }
 }

@@ -19,5 +19,5 @@ public interface PwdChangeStrategy {
      * @param usr
      * @return a string of the password policy for the usr.
      */
-    public String getPasswordPolicy(User usr);
+    public String getPasswordPolicy();
 }

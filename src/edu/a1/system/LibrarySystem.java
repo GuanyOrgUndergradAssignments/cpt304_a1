@@ -10,8 +10,11 @@ import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.database.BookManagement;
 import edu.a1.database.BorrowManagement;
 import edu.a1.database.UserManagement;
+import edu.a1.system.cmd.ChangePwdCommand;
 import edu.a1.system.cmd.Command;
 import edu.a1.system.cmd.ExitCommand;
+import edu.a1.system.cmd.LoginCommand;
+import edu.a1.system.cmd.LogoutCommand;
 import edu.a1.system.context.SystemAdminContext;
 import edu.a1.system.context.UnprivilegedQueryContext;
 import edu.a1.system.context.reader.NoReaderContext;
@@ -26,7 +29,7 @@ import edu.a1.system.context.reader.ReaderContext;
 public final class LibrarySystem {
    
     // Internal data
-    private static Map<String, Command> commands;
+    private static Map<String, Command> commands; // will be immutable
     private static boolean exit = false;
 
     // System states
@@ -49,6 +52,15 @@ public final class LibrarySystem {
      */
     private LibrarySystem() {
         throw new UnsupportedOperationException("Use static methods only. Do not create an instance.");
+    }
+
+    /**
+     * commands will be created immutable, but itself is not final.
+     * Therefore, one can only get it.
+     * @return
+     */
+    public static Map<String, Command> getCommands() {
+        return commands;
     }
 
     /**
@@ -89,15 +101,17 @@ public final class LibrarySystem {
             var temp = new HashMap<String, Command>();
         
             // add the commands
-            commands.put("exit", new ExitCommand());
-            throw new RuntimeException("Not fully implemented.");
+            commands.put(ExitCommand.name, new ExitCommand());
+            commands.put(LoginCommand.name, new LoginCommand());
+            commands.put(LogoutCommand.name, new LogoutCommand());
+            commands.put(ChangePwdCommand.name, new ChangePwdCommand());
     
-            // commands = Collections.unmodifiableMap(temp);
+            commands = Collections.unmodifiableMap(temp);
         }
         
     }
 
-    private static class CommandResult {
+    public static class CommandResult {
 
         public CommandResult(String n, List<String> a) {
             this.name = n; 
@@ -111,9 +125,9 @@ public final class LibrarySystem {
     /**
      * Turns a command line string into name and args.
      * @param commandLine
-     * @return
+     * @return names and args contained in CommandResult
      */
-    private static CommandResult interpretCommand(String commandLine) {
+    public static CommandResult interpretCommand(String commandLine) {
         throw new RuntimeException("Not implemented.");
     }
 

@@ -36,6 +36,9 @@ public interface Command {
         List<String> options,
         List<String> parameters
     ) {
+        
+        assert(usage != null && effect != null && options != null && parameters != null);
+
         String ret = "Usage: ";
 
         // usage
