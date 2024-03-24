@@ -17,8 +17,10 @@ public class ExitCommand implements Command {
 
     @Override
     public String helpMessage() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'helpMessage'");
+        return Command.generateHelpMessage(
+            "exit", "exits the system", 
+            List.of(), List.of()
+        );
     }
     
 }

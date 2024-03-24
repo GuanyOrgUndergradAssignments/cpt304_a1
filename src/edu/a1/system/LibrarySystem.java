@@ -1,16 +1,15 @@
 package edu.a1.system;
 
 import java.sql.Date;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.database.BookManagement;
 import edu.a1.database.BorrowManagement;
 import edu.a1.database.UserManagement;
-import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.system.cmd.Command;
 import edu.a1.system.cmd.ExitCommand;
 import edu.a1.system.context.SystemAdminContext;
@@ -150,7 +149,14 @@ public final class LibrarySystem {
      */
     public static void mainLoop() {
         while(!exit) {
-            handleCommandLine();
+            // Errors from commands are reported as exceptions.
+            // print error messages to the console.
+            try {
+                handleCommandLine();
+            }
+            catch(Exception e) {
+                ConsoleInteraction.writeToConsole("Error: " + e.getMessage());
+            }
         }
     }
 
@@ -159,6 +165,5 @@ public final class LibrarySystem {
         LibrarySystem.initLibrarySystem();
         LibrarySystem.mainLoop();
 
-        throw new RuntimeException("Not implemented.");
     }
 }
