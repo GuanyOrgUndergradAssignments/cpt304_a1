@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.a1.database.BookManagement;
+import edu.a1.database.BorrowManagement;
+import edu.a1.database.UserManagement;
+import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.system.cmd.Command;
 import edu.a1.system.cmd.ExitCommand;
 import edu.a1.system.context.SystemAdminContext;
@@ -22,14 +26,31 @@ import edu.a1.system.context.reader.ReaderContext;
  */
 public final class LibrarySystem {
    
+    // Internal data
     private static Map<String, Command> commands;
     private static boolean exit = false;
 
+    // System states
+    public static SystemAuthenticator authenticator;
     public static Date today;
 
+    // System contexts
     public static UnprivilegedQueryContext unprivilegedQueryContext;
     public static SystemAdminContext systemAdminContext;
     public static ReaderContext readerContext;
+
+    // Database interfaces
+    public static BookManagement bookStorage;
+    public static BorrowManagement borrowStorage;
+    public static UserManagement userStorage;
+
+    /**
+     * Use static methods only.
+     * Do not create an instance.
+     */
+    private LibrarySystem() {
+        throw new UnsupportedOperationException("Use static methods only. Do not create an instance.");
+    }
 
     /**
      * @return the date today
@@ -43,14 +64,25 @@ public final class LibrarySystem {
      */
     public static void initLibrarySystem() {
 
-        today = findToday();
+        // init the states
+        {
+            today = findToday();
+            authenticator = new SystemAuthenticator();
+        }
 
-        // Create the components
+        // Create the contexts
         {
             unprivilegedQueryContext = new UnprivilegedQueryContext();
             systemAdminContext = new SystemAdminContext();
             // initially no one is logged in.
             readerContext = new NoReaderContext();
+        }
+
+        // create database interfaces
+        {
+            bookStorage = new BookManagement();
+            borrowStorage = new BorrowManagement();
+            userStorage = new UserManagement();
         }
 
         // Create the command handlers
@@ -63,6 +95,7 @@ public final class LibrarySystem {
     
             // commands = Collections.unmodifiableMap(temp);
         }
+        
     }
 
     private static class CommandResult {
