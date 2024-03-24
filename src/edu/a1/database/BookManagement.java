@@ -33,7 +33,7 @@ public class BookManagement implements BookManager {
     // Finds all book.
     @Override
     public List<Book> findAll(){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**
@@ -44,7 +44,7 @@ public class BookManagement implements BookManager {
      */
     @Override
     public Book findByISBN(String isbn){
-
+        throw new RuntimeException("Not implemented.");
     }
 
 
@@ -56,7 +56,7 @@ public class BookManagement implements BookManager {
      */
     @Override
     public List<Book> findByBookName(String bookName){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**
@@ -67,7 +67,7 @@ public class BookManagement implements BookManager {
      */
     @Override
     public List<Book> findByBookAuthor(String author){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**
@@ -79,7 +79,7 @@ public class BookManagement implements BookManager {
      */
     @Override
     public Book findByBookNameAndAuthor(String bookName, String author){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**
@@ -90,7 +90,7 @@ public class BookManagement implements BookManager {
      */
     @Override
     public List<Book> findByBookCategory(String category){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**

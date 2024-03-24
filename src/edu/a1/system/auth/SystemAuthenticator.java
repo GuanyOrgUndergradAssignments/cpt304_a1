@@ -44,6 +44,8 @@ public final class SystemAuthenticator {
      * 
      * @param username
      * @param password
+     * @throws IllegalArgumentException on incorrect credentials
+     * @throws IllegalStateException if already logged in
      */
     public void login(String username, String password) {
 
@@ -71,6 +73,8 @@ public final class SystemAuthenticator {
      *  a user is logged in.
      * Postcondition
      *  the user is logged out.
+     * 
+     * @throws IllegalStateException if not logged in
      */
     public void logout() {
 
@@ -94,6 +98,8 @@ public final class SystemAuthenticator {
      *  2. the user is logged out. You must log in again.
      * 
      * @param newPassword
+     * @throws IllegalArgumentException if newPassword is not accepted.
+     * @throws IllegalStateException if not logged in
      */
     public void changePassword(String newPassword) {
         

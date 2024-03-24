@@ -11,6 +11,7 @@ public interface PwdChangeStrategy {
     /**
      * @param usr
      * @param pwd
+     * @throws IllegalArgumentException if pwd equals old pwd.
      * @return true iff the new password can be approved for the usr.
      */
     public boolean approveNewPassword(User usr, String pwd);

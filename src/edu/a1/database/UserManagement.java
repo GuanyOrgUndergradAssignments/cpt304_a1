@@ -36,7 +36,7 @@ public class UserManagement implements UserManager {
      */
     @Override
     public User findByUsername(String username){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**

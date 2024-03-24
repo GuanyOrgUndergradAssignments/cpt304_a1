@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import edu.a1.system.LibrarySystem;
 
@@ -16,7 +16,7 @@ import edu.a1.system.LibrarySystem;
 public class TestLibrarySystem {
     
     @BeforeAll
-    public void initLibrarySystem() {
+    public static void initLibrarySystem() {
         initLibrarySystem();
     }
 

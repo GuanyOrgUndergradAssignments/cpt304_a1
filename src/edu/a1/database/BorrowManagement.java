@@ -3,6 +3,7 @@ import java.sql.Date;
 import java.util.List;
 
 import edu.a1.borrow.Borrow;
+import edu.a1.system.User;
 
 public class BorrowManagement implements BorrowManager {
 
@@ -32,31 +33,6 @@ public class BorrowManagement implements BorrowManager {
     }
 
     /**
-     * Finds borrow record by Start time and username.
-     * 
-     * @param username the username provided.
-     * @param start the start time.
-     * @return the specific record.
-     */
-    @Override
-    public Borrow findByStartTimeAndUsername(String username, Date start){
-
-    }
-
-    /**
-     * Finds borrow record by End time and username.
-     * 
-     * @param username the username provided.
-     * @param end the end time.
-     * @return the specific record.
-     */
-    @Override
-    public Borrow findByEndTimeAndUsername(String username, Date end){
-
-    }
-
-
-    /**
      * Finds borrow record by username.
      * 
      * @param username the username provided.
@@ -64,7 +40,7 @@ public class BorrowManagement implements BorrowManager {
      */
     @Override
     public List<Borrow> findByUsername(String username){
-
+        throw new RuntimeException("Not implemented.");
     }
 
     /**
@@ -75,7 +51,7 @@ public class BorrowManagement implements BorrowManager {
      */
     @Override
     public List<Borrow> findByISBN(String isbn){
-
+        throw new RuntimeException("Not implemented.");
     }
     
     /**
@@ -87,5 +63,31 @@ public class BorrowManagement implements BorrowManager {
     @Override
     public boolean existId(String id){
         return true;
+    }
+
+
+    /**
+     * Finds borrow record by Start time and username.
+     * 
+     * @param username the username provided.
+     * @param start the start time.
+     * @return the specific record.
+     */
+    @Override
+    public Borrow findByStartTimeAndUsername(User user, Date start) {
+        throw new RuntimeException("Not implemented.");
+    }
+
+
+    /**
+     * Finds borrow record by End time and username.
+     * 
+     * @param username the username provided.
+     * @param end the end time.
+     * @return the specific record.
+     */
+    @Override
+    public Borrow findByEndTimeAndUsername(User user, Date end) {
+        throw new RuntimeException("Not implemented.");
     }
 }

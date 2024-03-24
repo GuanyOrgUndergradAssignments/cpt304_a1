@@ -12,6 +12,19 @@ public final class User {
     private String username;
     private String pwd;
 
+    /**
+     * For SQL
+     */
+    public User() {}
+
+    /**
+     * For us
+     */
+    public User(String name, String pwd) {
+        this.username = name;
+        this.pwd = pwd;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -23,6 +36,21 @@ public final class User {
     }
     public String getPwd() {
         return pwd;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof User)) {
+            return false;
+        }
+
+        var o = (User)other;
+
+        if(o.username.equals(this.username)) {
+            assert(o.pwd.equals(this.pwd));
+            return true;
+        }
+        return false;
     }
 
 }
