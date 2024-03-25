@@ -1,12 +1,36 @@
 package edu.a1.book;
+
+import javax.persistence.*;
 // import package
+@Entity
+@Table(name = "books")
 public class Book{
-    private String bookName;
+    // Attributes
+    // ACTUAL DATABASE MIGHT BE DIFFERENT
+
+    // PRIMARY KEY
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ISBN")
     private String ISBN;
-    private int quantity;
-    private String category;
-    private String publishedYear;
+
+    // UNIQUE
+    @Column(name = "authorName", unique = true)
     private String authorName;
+
+    @Column(name = "bookName")
+    private String bookName;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "publishedYear")
+    private String publishedYear;
+
+    @Column(name = "retailPrice")
     private double retailPrice;
 
     // Constructor
