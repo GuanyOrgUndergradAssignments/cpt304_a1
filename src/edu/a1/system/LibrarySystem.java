@@ -10,11 +10,15 @@ import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.database.BookManagement;
 import edu.a1.database.BorrowManagement;
 import edu.a1.database.UserManagement;
+import edu.a1.system.cmd.AdminManCommand;
+import edu.a1.system.cmd.BorrowHistoryCommand;
 import edu.a1.system.cmd.ChangePwdCommand;
 import edu.a1.system.cmd.Command;
 import edu.a1.system.cmd.ExitCommand;
 import edu.a1.system.cmd.LoginCommand;
 import edu.a1.system.cmd.LogoutCommand;
+import edu.a1.system.cmd.QueryBookCommand;
+import edu.a1.system.cmd.ReaderBookOpCommand;
 import edu.a1.system.context.SystemAdminContext;
 import edu.a1.system.context.UnprivilegedQueryContext;
 import edu.a1.system.context.reader.NoReaderContext;
@@ -39,7 +43,6 @@ public final class LibrarySystem {
     // System contexts
     public static UnprivilegedQueryContext unprivilegedQueryContext;
     public static SystemAdminContext systemAdminContext;
-    public static ReaderContext readerContext;
 
     // Database interfaces
     public static BookManagement bookStorage;
@@ -85,8 +88,6 @@ public final class LibrarySystem {
         {
             unprivilegedQueryContext = new UnprivilegedQueryContext();
             systemAdminContext = new SystemAdminContext();
-            // initially no one is logged in.
-            readerContext = new NoReaderContext();
         }
 
         // create database interfaces
@@ -105,6 +106,10 @@ public final class LibrarySystem {
             commands.put(LoginCommand.name, new LoginCommand());
             commands.put(LogoutCommand.name, new LogoutCommand());
             commands.put(ChangePwdCommand.name, new ChangePwdCommand());
+            commands.put(AdminManCommand.name, new AdminManCommand());
+            commands.put(BorrowHistoryCommand.name, new BorrowHistoryCommand());
+            commands.put(QueryBookCommand.name, new QueryBookCommand());
+            commands.put(ReaderBookOpCommand.name, new ReaderBookOpCommand());
     
             commands = Collections.unmodifiableMap(temp);
         }

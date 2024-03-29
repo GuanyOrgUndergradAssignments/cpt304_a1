@@ -8,6 +8,7 @@ import java.util.List;
  * @author Guanyuming He
  */
 public interface Command {
+    
     /**
      * Handles the command according to the passed in arguments.
      * @param arguments
