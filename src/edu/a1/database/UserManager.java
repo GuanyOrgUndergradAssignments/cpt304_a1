@@ -1,4 +1,5 @@
 package edu.a1.database;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,24 +41,38 @@ public class UserManager {
 
 
     public void add(User user) {
-        users.add(user);
-    }
-
-    public void delete(User user) {
-        users.remove(user);
-    }
-
-    public void replace(User originalUser, User newUser) {
-        int index = users.indexOf(originalUser);
-        if (index != -1) {
-            users.set(index, newUser);
-            System.out.println("User replaced successfully.");
+        if (!existUser(user.getUsername())) {
+            users.add(user);
+            System.out.println("User added successfully.");
         } else {
-            System.out.println("Original user not found. Cannot replace.");
+            System.out.println("User with the same username already exists. Cannot add.");
         }
     }
 
-    // get all userss
+    public void delete(User user) {
+        if (users.contains(user)) {
+            users.remove(user);
+            System.out.println("User deleted successfully.");
+        } else {
+            System.out.println("User not found. Cannot delete.");
+        }
+    }
+
+    public void replace(User originalUser, User newUser) {
+        if (existUser(newUser.getUsername())) {
+            System.out.println("New user has the same username as an existing user. Cannot replace.");
+        } else {
+            int index = users.indexOf(originalUser);
+            if (index != -1) {
+                users.set(index, newUser);
+                System.out.println("User replaced successfully.");
+            } else {
+                System.out.println("Original user not found. Cannot replace.");
+            }
+        }
+    }
+
+    // get all users
     public List<User> findAll() {
         return users;
     }
@@ -65,7 +80,7 @@ public class UserManager {
     // find book by username
     public User findByUsername(String username) {
         for (User user : users) {
-            if (user.getUsername() == username) {
+            if (user.getUsername().equals(username)) {
                 return user;
             }
         }

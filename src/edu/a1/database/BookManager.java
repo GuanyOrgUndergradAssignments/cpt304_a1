@@ -42,22 +42,37 @@ public class BookManager {
 
     // add book
     public void add(Book book) {
-        books.add(book);
+        if (!existBook(book.getISBN())) {
+            books.add(book);
+            System.out.println("Book added successfully.");
+        } else {
+            System.out.println("Book with the same ISBN already exists. Cannot add.");
+        }
     }
 
     // delete
     public void delete(Book book) {
-        books.remove(book);
+        if (books.contains(book)) {
+            books.remove(book);
+            System.out.println("Book deleted successfully.");
+        } else {
+            System.out.println("Book not found. Cannot delete.");
+        }
     }
+    
 
     // replace
     public void replace(Book originalBook, Book newBook) {
-        int index = books.indexOf(originalBook);
-        if (index != -1) {
-            books.set(index, newBook);
-            System.out.println("Book replaced successfully.");
+        if (existBook(newBook.getISBN())) {
+            System.out.println("New book has the same ISBN as an existing book. Cannot replace.");
         } else {
-            System.out.println("Original book not found. Cannot replace.");
+            int index = books.indexOf(originalBook);
+            if (index != -1) {
+                books.set(index, newBook);
+                System.out.println("Book replaced successfully.");
+            } else {
+                System.out.println("Original book not found. Cannot replace.");
+            }
         }
     }
 

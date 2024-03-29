@@ -41,22 +41,36 @@ public class BorrowManager {
 
     // add
     public void add(Borrow borrow) {
-        records.add(borrow);
+        if (!existRecord(borrow.getBorrowID())) {
+            records.add(borrow);
+            System.out.println("Record added successfully.");
+        } else {
+            System.out.println("Record with the same borrow ID already exists. Cannot add.");
+        }
     }
 
     // delete
     public void delete(Borrow borrow) {
-        records.remove(borrow);
+        if (records.contains(borrow)) {
+            records.remove(borrow);
+            System.out.println("Record deleted successfully.");
+        } else {
+            System.out.println("Record not found. Cannot delete.");
+        }
     }
 
     // replace
     public void replace(Borrow originalBorrow, Borrow newBorrow) {
-        int index = records.indexOf(originalBorrow);
-        if (index != -1) {
-            records.set(index, newBorrow);
-            System.out.println("Borrow replaced successfully.");
+        if (existRecord(newBorrow.getBorrowID())) {
+            System.out.println("New record has the same borrow ID as an existing record. Cannot replace.");
         } else {
-            System.out.println("Original borrow not found. Cannot replace.");
+            int index = records.indexOf(originalBorrow);
+            if (index != -1) {
+                records.set(index, newBorrow);
+                System.out.println("Record replaced successfully.");
+            } else {
+                System.out.println("Original record not found. Cannot replace.");
+            }
         }
     }
 
