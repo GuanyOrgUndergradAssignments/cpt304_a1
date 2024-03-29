@@ -1,6 +1,11 @@
 package edu.a1.system;
 
-import java.sql.Date;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +26,6 @@ import edu.a1.system.cmd.QueryBookCommand;
 import edu.a1.system.cmd.ReaderBookOpCommand;
 import edu.a1.system.context.SystemAdminContext;
 import edu.a1.system.context.UnprivilegedQueryContext;
-import edu.a1.system.context.reader.NoReaderContext;
-import edu.a1.system.context.reader.ReaderContext;
 
 /**
  * Interprets the commands the user enters into the system
@@ -70,7 +73,7 @@ public final class LibrarySystem {
      * @return the date today
      */
     private static Date findToday() {
-        throw new RuntimeException("Not implemented.");
+        return Date.from(Instant.now());
     }
 
     /**
@@ -133,7 +136,49 @@ public final class LibrarySystem {
      * @return names and args contained in CommandResult
      */
     public static CommandResult interpretCommand(String commandLine) {
-        throw new RuntimeException("Not implemented.");
+
+        // command:
+        //      name |
+        //      name SPACE args
+        // args:
+        //      arg
+        //      args SPACE arg
+
+        String name = null;
+
+        int nameSeparator = commandLine.indexOf(" ");
+
+        // If the command has only the name
+        if(nameSeparator == -1) {
+            name = commandLine;
+            return new CommandResult(name, List.of());
+        }
+
+        // Otherwise, parse the args
+        name = commandLine.substring(0, nameSeparator);
+        String argsStr = commandLine.substring(nameSeparator+1);
+        List<String> args = new ArrayList<>();
+        int nextSpaceInd = -1;
+        do {
+            // find the index of the next space
+            // and extract the next argument from the string.
+            nextSpaceInd = argsStr.indexOf(" ");
+            if(nextSpaceInd == -1) {
+                // No further spaces. The whole string is the argument.
+                args.add(argsStr);
+                argsStr = "";
+            }
+            else {
+                // Extract the next argument.
+                args.add(argsStr.substring(0, nextSpaceInd));
+                argsStr = argsStr.substring(nextSpaceInd+1);
+            }
+        }
+        while(nextSpaceInd != -1);
+        // Now the argsStr should have no more characters.
+        assert(argsStr.isEmpty());
+
+        return new CommandResult(name, args);
     }
 
     private static void handleCommandLine() {
