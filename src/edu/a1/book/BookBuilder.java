@@ -1,12 +1,12 @@
 package edu.a1.book;
 public interface BookBuilder{ 
-    public void setBookName(String bookName);
-    public void setAuthorName(String authorName);
-    public void setISBN(String ISBN);
-    public void setQuantity(int quantity);
-    public void setCategory(String category);
-    public void setPublishedYear(String publishedYear);
-    public void setRetailPrice(double retailPrice);
+    public BookBuilder setBookName(String bookName);
+    public BookBuilder setAuthorName(String authorName);
+    public BookBuilder setISBN(String ISBN);
+    public BookBuilder setQuantity(int quantity);
+    public BookBuilder setCategory(String category);
+    public BookBuilder setPublishedYear(String publishedYear);
+    public BookBuilder setRetailPrice(double retailPrice);
 
     public Book build();
 }
