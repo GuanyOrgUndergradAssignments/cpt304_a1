@@ -24,8 +24,6 @@ import edu.a1.system.cmd.LoginCommand;
 import edu.a1.system.cmd.LogoutCommand;
 import edu.a1.system.cmd.QueryBookCommand;
 import edu.a1.system.cmd.ReaderBookOpCommand;
-import edu.a1.system.context.SystemAdminContext;
-import edu.a1.system.context.UnprivilegedQueryContext;
 
 /**
  * Interprets the commands the user enters into the system
@@ -42,10 +40,6 @@ public final class LibrarySystem {
     // System states
     public static SystemAuthenticator authenticator;
     public static Date today;
-
-    // System contexts
-    public static UnprivilegedQueryContext unprivilegedQueryContext;
-    public static SystemAdminContext systemAdminContext;
 
     // Database interfaces
     public static BookManagement bookStorage;
@@ -85,12 +79,6 @@ public final class LibrarySystem {
         {
             today = findToday();
             authenticator = new SystemAuthenticator();
-        }
-
-        // Create the contexts
-        {
-            unprivilegedQueryContext = new UnprivilegedQueryContext();
-            systemAdminContext = new SystemAdminContext();
         }
 
         // create database interfaces
