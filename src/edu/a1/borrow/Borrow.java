@@ -4,7 +4,7 @@ import java.sql.Date;
 public class Borrow {
     private int borrowID;
     private String username;
-    private int bookID;
+    private String ISBN;
     private int numBorrowed;
     private int numReturned;
     private Date borrowedDate;
@@ -76,12 +76,12 @@ public class Borrow {
         this.username = username;
     }
 
-    public int getBookID() {
-        return bookID;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
     public int getNumReturned() {
