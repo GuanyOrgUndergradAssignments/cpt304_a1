@@ -1,7 +1,8 @@
 package edu.a1.borrow;
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Borrow {
+public class Borrow implements Serializable {
     private int borrowID;
     private String username;
     private String ISBN;
