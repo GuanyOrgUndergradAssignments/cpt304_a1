@@ -3,7 +3,7 @@ package edu.a1.book;
 import javax.persistence.*;
 // import package
 @Entity
-@Table(name = "books")
+@Table(name = "books", uniqueConstraints = {@UniqueConstraint(columnNames = {"authorName", "bookName"})})
 public class Book{
     // Attributes
     // ACTUAL DATABASE MIGHT BE DIFFERENT
@@ -15,7 +15,7 @@ public class Book{
     private String ISBN;
 
     // UNIQUE
-    @Column(name = "authorName", unique = true)
+    @Column(name = "authorName")
     private String authorName;
 
     @Column(name = "bookName")
