@@ -8,6 +8,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import edu.a1.system.LibrarySystem;
+import edu.a1.system.cmd.AdminManCommand;
+import edu.a1.system.cmd.BorrowHistoryCommand;
+import edu.a1.system.cmd.ChangePwdCommand;
+import edu.a1.system.cmd.ExitCommand;
+import edu.a1.system.cmd.LoginCommand;
+import edu.a1.system.cmd.LogoutCommand;
+import edu.a1.system.cmd.QueryBookCommand;
+import edu.a1.system.cmd.ReaderBookOpCommand;
 
 /**
  * Tests if the system works as intended.
@@ -17,7 +25,7 @@ public class TestLibrarySystem {
     
     @BeforeAll
     public static void initLibrarySystem() {
-        initLibrarySystem();
+        LibrarySystem.initLibrarySystem();
     }
 
     /**
@@ -25,7 +33,17 @@ public class TestLibrarySystem {
      */
     @Test
     public void testContainsAllCommands() {
-        fail("Not implemented.");
+        var commands = LibrarySystem.getCommands();
+
+        assertEquals(8, commands.size());
+        assertTrue(commands.containsKey(AdminManCommand.name));
+        assertTrue(commands.containsKey(BorrowHistoryCommand.name));
+        assertTrue(commands.containsKey(ChangePwdCommand.name));
+        assertTrue(commands.containsKey(ExitCommand.name));
+        assertTrue(commands.containsKey(LoginCommand.name));
+        assertTrue(commands.containsKey(LogoutCommand.name));
+        assertTrue(commands.containsKey(QueryBookCommand.name));
+        assertTrue(commands.containsKey(ReaderBookOpCommand.name));
     }
 
     /**
@@ -42,7 +60,7 @@ public class TestLibrarySystem {
         // name and options
         res = LibrarySystem.interpretCommand("abc --123 -r");
         assertEquals("abc", res.name);
-        assertEquals(List.of("--123", "--r"), res.args);
+        assertEquals(List.of("--123", "-r"), res.args);
 
         // name and pars
         res = LibrarySystem.interpretCommand("login abc def");

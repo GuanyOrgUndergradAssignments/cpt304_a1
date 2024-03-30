@@ -96,14 +96,14 @@ public final class LibrarySystem {
             var temp = new HashMap<String, Command>();
         
             // add the commands
-            commands.put(ExitCommand.name, new ExitCommand());
-            commands.put(LoginCommand.name, new LoginCommand());
-            commands.put(LogoutCommand.name, new LogoutCommand());
-            commands.put(ChangePwdCommand.name, new ChangePwdCommand());
-            commands.put(AdminManCommand.name, new AdminManCommand());
-            commands.put(BorrowHistoryCommand.name, new BorrowHistoryCommand());
-            commands.put(QueryBookCommand.name, new QueryBookCommand());
-            commands.put(ReaderBookOpCommand.name, new ReaderBookOpCommand());
+            temp.put(ExitCommand.name, new ExitCommand());
+            temp.put(LoginCommand.name, new LoginCommand());
+            temp.put(LogoutCommand.name, new LogoutCommand());
+            temp.put(ChangePwdCommand.name, new ChangePwdCommand());
+            temp.put(AdminManCommand.name, new AdminManCommand());
+            temp.put(BorrowHistoryCommand.name, new BorrowHistoryCommand());
+            temp.put(QueryBookCommand.name, new QueryBookCommand());
+            temp.put(ReaderBookOpCommand.name, new ReaderBookOpCommand());
     
             commands = Collections.unmodifiableMap(temp);
         }
