@@ -49,6 +49,9 @@ public final class LibrarySystem {
     public static BorrowManager borrowStorage;
     public static UserManager userStorage;
 
+    // Admin default pwd
+    public static final String DEFAULT_ADMIN_PASSWORD = "dh98f12bo3ujrb98";
+
     /**
      * Use static methods only.
      * Do not create an instance.
@@ -89,6 +92,13 @@ public final class LibrarySystem {
             bookStorage = new BookManagement();
             borrowStorage = new BorrowManagement();
             userStorage = new UserManagement();
+        }
+
+        // If there isn't an admin yet, create one with the default password
+        {
+            if(!userStorage.existUser("admin")) {
+                userStorage.save(new User("admin", DEFAULT_ADMIN_PASSWORD));
+            }
         }
 
         // Create the command handlers
