@@ -1,106 +1,161 @@
 package edu.a1.database;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.a1.book.Book;
 
 public class BookManagement implements BookManager {
-
-    private DatabaseConnection databaseConnection;
+    private List<Book> books;
 
     public BookManagement() {
-        this.databaseConnection = DatabaseConnection.getInstance();
+        books = new ArrayList<>();
+        loadBooks("books.ser");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> saveBooks("books.ser")));
     }
 
-    // Save a book object in database
+    // save file
+    @Override
+    public void saveBooks(String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
+            outputStream.writeObject(books);
+            System.out.println("Books saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // load file
+    @Override
+    public void loadBooks(String fileName) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            books = (List<Book>) inputStream.readObject();
+            System.out.println("Books loaded successfully.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("No previous data found.");
+        }
+    }
+
+    // add book
     @Override
     public void save(Book book) {
-        
+        if (!existBook(book.getISBN())) {
+            books.add(book);
+            System.out.println("Book added successfully.");
+        } else {
+            System.out.println("Book with the same ISBN already exists. Cannot add.");
+        }
     }
 
-    // Delete a book object from database
+    // delete
     @Override
     public void delete(Book book) {
-        
+        if (books.contains(book)) {
+            books.remove(book);
+            System.out.println("Book deleted successfully.");
+        } else {
+            System.out.println("Book not found. Cannot delete.");
+        }
+    }
+    
+
+    // replace
+    @Override
+    public void replace(Book originalBook, Book newBook) {
+        if (existBook(newBook.getISBN())) {
+            System.out.println("New book has the same ISBN as an existing book. Cannot replace.");
+        } else {
+            int index = books.indexOf(originalBook);
+            if (index != -1) {
+                books.set(index, newBook);
+                System.out.println("Book replaced successfully.");
+            } else {
+                System.out.println("Original book not found. Cannot replace.");
+            }
+        }
     }
 
-    // Replace an existed book in database
+    // get all books
     @Override
-    public void replace(Book book){
-
+    public List<Book> findAll() {
+        return books;
     }
 
-    // Finds all book.
+    // find book by ISBN
     @Override
-    public List<Book> findAll(){
-        throw new RuntimeException("Not implemented.");
+    public Book findByISBN(String isbn) {
+        for (Book book : books) {
+            if (book.getISBN().equals(isbn)) {
+                return book;
+            }
+        }
+        return null;
     }
 
-    /**
-     * Finds book by isbn.
-     * 
-     * @param isbn the isbn provided.
-     * @return the specific book.
-     */
+    // find book by bookName
     @Override
-    public Book findByISBN(String isbn){
-        throw new RuntimeException("Not implemented.");
+    public List<Book> findByBookName(String bookName) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getBookName().equals(bookName)) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
-
-    /**
-     * Finds book by name.
-     * 
-     * @param bookName the name provided.
-     * @return a list of book with the specific name.
-     */
+    // find book authorName
     @Override
-    public List<Book> findByBookName(String bookName){
-        throw new RuntimeException("Not implemented.");
+    public List<Book> findByBookAuthor(String authorName) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthorName().equals(authorName)) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
-    /**
-     * Finds book by author.
-     * 
-     * @param auhtor the author provided.
-     * @return a list of book with the specific author.
-     */
+    // find book by bookName and authorName
     @Override
-    public List<Book> findByBookAuthor(String author){
-        throw new RuntimeException("Not implemented.");
+    public Book findByBookNameAndAuthor(String bookName, String authorName) {
+        for (Book book : books) {
+            if (book.getBookName().equals(bookName) && book.getAuthorName().equals(authorName)) {
+                return book;
+            }
+        }
+        return null;
     }
 
-    /**
-     * Finds book by name and author.
-     * 
-     * @param bookName the name provided.
-     * @param author the author provided.
-     * @return the specific book.
-     */
+    // find book by category
     @Override
-    public Book findByBookNameAndAuthor(String bookName, String author){
-        throw new RuntimeException("Not implemented.");
+    public List<Book> findByBookCategory(String category) {
+        List<Book> result = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getCategory().equals(category)) {
+                result.add(book);
+            }
+        }
+        return result;
     }
 
-    /**
-     * Finds book by category.
-     * 
-     * @param category the category provided.
-     * @return a list of book with the specific category.
-     */
+    // check existence
     @Override
-    public List<Book> findByBookCategory(String category){
-        throw new RuntimeException("Not implemented.");
-    }
-
-    /**
-     * Check if book is existed.
-     * 
-     * @param isbn the username provided.
-     * @return boolean 
-     */
-    @Override
-    public boolean existBook(String isbn){
-        return true;
+    public boolean existBook(String isbn) {
+        for (Book book : books) {
+            if (book.getISBN().equals(isbn)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
+    
+
+

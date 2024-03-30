@@ -3,9 +3,11 @@ import java.util.List;
 
 import edu.a1.book.Book;
 public interface BookManager {
+    void saveBooks(String fileName);
+    void loadBooks(String fileName);
     void save(Book book);
     void delete(Book book);
-    void replace(Book book);
+    void replace(Book originalBook, Book newBook);
     List<Book> findAll();
     Book findByISBN(String isbn);
     List<Book> findByBookName(String bookName);

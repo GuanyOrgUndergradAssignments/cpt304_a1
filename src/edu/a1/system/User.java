@@ -1,5 +1,7 @@
 package edu.a1.system;
 
+import java.io.Serializable;
+
 /**
  * Foundation of different kinds of users.
  * Contains all the fields that the database stores about a user.
@@ -7,7 +9,7 @@ package edu.a1.system;
  * 
  * @author Guanyuming He, Kemu Xu
  */
-public final class User {
+public final class User implements Serializable{
 
     private String username;
     private String pwd;

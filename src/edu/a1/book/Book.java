@@ -1,6 +1,9 @@
 package edu.a1.book;
+
+import java.io.Serializable;
+
 // import package
-public class Book{
+public class Book implements Serializable{
     private String bookName;
     private String ISBN;
     private int quantity;
