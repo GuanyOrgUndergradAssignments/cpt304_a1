@@ -7,37 +7,37 @@ public class ConcreteBookBuilder implements BookBuilder {
     }
 
    @Override
-    public void setBookName(String bookName) {
+    public BookBuilder setBookName(String bookName) {
         book.setBookName(bookName);
     }
 
     @Override
-    public void setAuthorName(String authorName) {
+    public BookBuilder setAuthorName(String authorName) {
         book.setAuthorName(authorName);
     }
 
     @Override
-    public void setISBN(String ISBN) {
+    public BookBuilder setISBN(String ISBN) {
         book.setISBN(ISBN);
     }
 
     @Override
-    public void setQuantity(int quantity) {
+    public BookBuilder setQuantity(int quantity) {
         book.setQuantity(quantity);
     }
 
     @Override
-    public void setCategory(String category) {
+    public BookBuilder setCategory(String category) {
         book.setCategory(category);
     }
 
     @Override
-    public void setPublishedYear(String publishedYear) {
+    public BookBuilder setPublishedYear(String publishedYear) {
         book.setPublishedYear(publishedYear);
     }
 
     @Override
-    public void setRetailPrice(double retailPrice) {
+    public BookBuilder setRetailPrice(double retailPrice) {
         book.setRetailPrice(retailPrice);
     }
 
