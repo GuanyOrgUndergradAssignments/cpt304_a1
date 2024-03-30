@@ -6,7 +6,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import edu.a1.database.UserManagement;
+import edu.a1.database.UserManager;
 import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 import edu.a1.system.auth.SystemAuthenticator;
@@ -17,7 +17,7 @@ import edu.a1.system.auth.SystemAuthenticator;
  */
 public class TestAuthentication {
 
-    private static UserManagement usrDB;
+    private static UserManager usrDB;
 
     @BeforeAll
     public static void setUpDatabase() {

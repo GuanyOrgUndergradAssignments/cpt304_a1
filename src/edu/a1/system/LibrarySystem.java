@@ -13,8 +13,11 @@ import java.util.Map;
 
 import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.database.BookManagement;
+import edu.a1.database.BookManager;
 import edu.a1.database.BorrowManagement;
+import edu.a1.database.BorrowManager;
 import edu.a1.database.UserManagement;
+import edu.a1.database.UserManager;
 import edu.a1.system.cmd.AdminManCommand;
 import edu.a1.system.cmd.BorrowHistoryCommand;
 import edu.a1.system.cmd.ChangePwdCommand;
@@ -42,9 +45,9 @@ public final class LibrarySystem {
     public static Date today;
 
     // Database interfaces
-    public static BookManagement bookStorage;
-    public static BorrowManagement borrowStorage;
-    public static UserManagement userStorage;
+    public static BookManager bookStorage;
+    public static BorrowManager borrowStorage;
+    public static UserManager userStorage;
 
     /**
      * Use static methods only.
