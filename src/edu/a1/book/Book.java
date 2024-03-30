@@ -1,36 +1,18 @@
 package edu.a1.book;
 
-import javax.persistence.*;
-// import package
-@Entity
-@Table(name = "books", uniqueConstraints = {@UniqueConstraint(columnNames = {"authorName", "bookName"})})
-public class Book{
+import java.io.Serializable;
+
+public class Book implements Serializable{
+
+    // private static final long serialVersionUID = 1L;
+    
     // Attributes
-    // ACTUAL DATABASE MIGHT BE DIFFERENT
-
-    // PRIMARY KEY
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ISBN")
     private String ISBN;
-
-    // UNIQUE
-    @Column(name = "authorName")
     private String authorName;
-
-    @Column(name = "bookName")
     private String bookName;
-
-    @Column(name = "quantity")
     private int quantity;
-
-    @Column(name = "category")
     private String category;
-
-    @Column(name = "publishedYear")
     private String publishedYear;
-
-    @Column(name = "retailPrice")
     private double retailPrice;
 
     // Constructor
