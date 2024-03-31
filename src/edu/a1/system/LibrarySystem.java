@@ -1,6 +1,11 @@
 package edu.a1.system;
 
-import java.sql.Date;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,17 +13,20 @@ import java.util.Map;
 
 import edu.a1.system.auth.SystemAuthenticator;
 import edu.a1.database.BookManagement;
+import edu.a1.database.BookManager;
 import edu.a1.database.BorrowManagement;
+import edu.a1.database.BorrowManager;
 import edu.a1.database.UserManagement;
+import edu.a1.database.UserManager;
+import edu.a1.system.cmd.AdminManCommand;
+import edu.a1.system.cmd.BorrowHistoryCommand;
 import edu.a1.system.cmd.ChangePwdCommand;
 import edu.a1.system.cmd.Command;
 import edu.a1.system.cmd.ExitCommand;
 import edu.a1.system.cmd.LoginCommand;
 import edu.a1.system.cmd.LogoutCommand;
-import edu.a1.system.context.SystemAdminContext;
-import edu.a1.system.context.UnprivilegedQueryContext;
-import edu.a1.system.context.reader.NoReaderContext;
-import edu.a1.system.context.reader.ReaderContext;
+import edu.a1.system.cmd.QueryBookCommand;
+import edu.a1.system.cmd.ReaderBookOpCommand;
 
 /**
  * Interprets the commands the user enters into the system
@@ -36,15 +44,10 @@ public final class LibrarySystem {
     public static SystemAuthenticator authenticator;
     public static Date today;
 
-    // System contexts
-    public static UnprivilegedQueryContext unprivilegedQueryContext;
-    public static SystemAdminContext systemAdminContext;
-    public static ReaderContext readerContext;
-
     // Database interfaces
-    public static BookManagement bookStorage;
-    public static BorrowManagement borrowStorage;
-    public static UserManagement userStorage;
+    public static BookManager bookStorage;
+    public static BorrowManager borrowStorage;
+    public static UserManager userStorage;
 
     /**
      * Use static methods only.
@@ -67,7 +70,7 @@ public final class LibrarySystem {
      * @return the date today
      */
     private static Date findToday() {
-        throw new RuntimeException("Not implemented.");
+        return Date.from(Instant.now());
     }
 
     /**
@@ -79,14 +82,6 @@ public final class LibrarySystem {
         {
             today = findToday();
             authenticator = new SystemAuthenticator();
-        }
-
-        // Create the contexts
-        {
-            unprivilegedQueryContext = new UnprivilegedQueryContext();
-            systemAdminContext = new SystemAdminContext();
-            // initially no one is logged in.
-            readerContext = new NoReaderContext();
         }
 
         // create database interfaces
@@ -101,10 +96,14 @@ public final class LibrarySystem {
             var temp = new HashMap<String, Command>();
         
             // add the commands
-            commands.put(ExitCommand.name, new ExitCommand());
-            commands.put(LoginCommand.name, new LoginCommand());
-            commands.put(LogoutCommand.name, new LogoutCommand());
-            commands.put(ChangePwdCommand.name, new ChangePwdCommand());
+            temp.put(ExitCommand.name, new ExitCommand());
+            temp.put(LoginCommand.name, new LoginCommand());
+            temp.put(LogoutCommand.name, new LogoutCommand());
+            temp.put(ChangePwdCommand.name, new ChangePwdCommand());
+            temp.put(AdminManCommand.name, new AdminManCommand());
+            temp.put(BorrowHistoryCommand.name, new BorrowHistoryCommand());
+            temp.put(QueryBookCommand.name, new QueryBookCommand());
+            temp.put(ReaderBookOpCommand.name, new ReaderBookOpCommand());
     
             commands = Collections.unmodifiableMap(temp);
         }
@@ -128,7 +127,49 @@ public final class LibrarySystem {
      * @return names and args contained in CommandResult
      */
     public static CommandResult interpretCommand(String commandLine) {
-        throw new RuntimeException("Not implemented.");
+
+        // command:
+        //      name |
+        //      name SPACE args
+        // args:
+        //      arg
+        //      args SPACE arg
+
+        String name = null;
+
+        int nameSeparator = commandLine.indexOf(" ");
+
+        // If the command has only the name
+        if(nameSeparator == -1) {
+            name = commandLine;
+            return new CommandResult(name, List.of());
+        }
+
+        // Otherwise, parse the args
+        name = commandLine.substring(0, nameSeparator);
+        String argsStr = commandLine.substring(nameSeparator+1);
+        List<String> args = new ArrayList<>();
+        int nextSpaceInd = -1;
+        do {
+            // find the index of the next space
+            // and extract the next argument from the string.
+            nextSpaceInd = argsStr.indexOf(" ");
+            if(nextSpaceInd == -1) {
+                // No further spaces. The whole string is the argument.
+                args.add(argsStr);
+                argsStr = "";
+            }
+            else {
+                // Extract the next argument.
+                args.add(argsStr.substring(0, nextSpaceInd));
+                argsStr = argsStr.substring(nextSpaceInd+1);
+            }
+        }
+        while(nextSpaceInd != -1);
+        // Now the argsStr should have no more characters.
+        assert(argsStr.isEmpty());
+
+        return new CommandResult(name, args);
     }
 
     private static void handleCommandLine() {

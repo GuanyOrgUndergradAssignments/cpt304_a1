@@ -124,8 +124,8 @@ public final class SystemAuthenticator {
 
         // success
         // change the password and replace the user in the database.
-        loggedInUser.setPwd(newPassword);
-        LibrarySystem.userStorage.replace(loggedInUser);
+        var newUser = new User(loggedInUser.getUsername(), newPassword);
+        LibrarySystem.userStorage.replace(loggedInUser, newUser);
         // log out
         loggedInUser = null;
         
