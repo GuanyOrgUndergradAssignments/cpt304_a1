@@ -2,14 +2,17 @@ package edu.a1.book;
 
 import java.io.Serializable;
 
-// import package
 public class Book implements Serializable{
-    private String bookName;
+
+    // private static final long serialVersionUID = 1L;
+    
+    // Attributes
     private String ISBN;
+    private String authorName;
+    private String bookName;
     private int quantity;
     private String category;
     private String publishedYear;
-    private String authorName;
     private double retailPrice;
 
     // Constructor
