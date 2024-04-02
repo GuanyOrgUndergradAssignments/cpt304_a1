@@ -1,8 +1,6 @@
 package edu.a1.system.cmd;
 
 import java.util.List;
-
-import edu.a1.system.ConsoleInteraction;
 import edu.a1.system.LibrarySystem;
 
 /**

@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.a1.book.Book;
 import edu.a1.book.ConcreteBookBuilder;
-import edu.a1.system.ConsoleInteraction;
 import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 import edu.a1.system.auth.ReaderPwdChangeStrategy;
@@ -88,13 +87,17 @@ public class AdminManCommand implements Command {
         // Check if the pwd can be approved.
         // The user can only be a reader, because admin is always there.
         // Use the strategy for a reader.
-        var newUser = new User(usrname, pwd);
+        // newUser's pwd must different from the pwd given
+        // or the strat will report that they are the same.
+        var newUser = new User(usrname, "");
         var strat = new ReaderPwdChangeStrategy();
         if(!strat.approveNewPassword(newUser, pwd)) {
             throw new IllegalArgumentException("Illegal password:\n" + strat.getPasswordPolicy());
         }
 
         // Now everything is fine. add the user.
+        // don't forget to change the pwd back
+        newUser.setPwd(pwd);
         udb.save(newUser);
 
     }
@@ -148,6 +151,19 @@ public class AdminManCommand implements Command {
             .build();
         bdb.save(newBook);
 
+    }
+
+    private void handleListUsers() {
+        List<User> users = LibrarySystem.userStorage.findAll();
+
+        if(users.isEmpty()) {
+            LibrarySystem.getIO().writeTo("No user is present");
+            return;
+        }
+
+        for(var u : users) {
+            LibrarySystem.getIO().writeTo(u.getUsername());
+        }
     }
 
     /***************************************** override Command *****************************************/
@@ -213,6 +229,22 @@ public class AdminManCommand implements Command {
                 throw new UnsupportedOperationException("--add doesn't support this operation.");
             }
             break;
+        
+        case "--list":
+            if(arguments.size() != 2) {
+                throw new IllegalArgumentException("Incorrect number of arguments for --list.");
+            }
+
+            switch(arguments.get(1)) {
+            case "user":
+                handleListUsers();
+                break;
+
+            default:
+                throw new UnsupportedOperationException("--list doesn't support this operation.");
+            }
+
+            break;
 
         default:
             throw new UnsupportedOperationException("Option not supported for this command.");
@@ -229,20 +261,22 @@ public class AdminManCommand implements Command {
             "Manages the library system as admin.", 
             List.of(
                 "--rm user <usrname>\n" +
-                    "\t <usrname>: name of the user",
+                    "\t\t <usrname>: name of the user",
                 "--rm book <isbn>\n" +
-                    "\t <isbn>: ISBN of the book",
+                    "\t\t <isbn>: ISBN of the book",
                 "--add user <usrname> <pwd>\n" +
-                    "\t <usrname>: username\n" +
-                    "\t <pwd>: password",
+                    "\t\t <usrname>: username\n" +
+                    "\t\t <pwd>: password",
                 "--add book <isbn> <num> <author> <name> <year> <cat> <price>\n" +
-                    "\t <isbn>: ISBN\n" +
-                    "\t <num>: number of copies\n" +
-                    "\t <author>: name of author\n" +
-                    "\t <name>: book name\n" +
-                    "\t <year>: published year\n" +
-                    "\t <cat>: category\n" +
-                    "\t <price>: retail price\n"
+                    "\t\t <isbn>: ISBN\n" +
+                    "\t\t <num>: number of copies\n" +
+                    "\t\t <author>: name of author\n" +
+                    "\t\t <name>: book name\n" +
+                    "\t\t <year>: published year\n" +
+                    "\t\t <cat>: category\n" +
+                    "\t\t <price>: retail price\n",
+                "--list user\n" +
+                    "\t\tLists all usernames"
             ), 
             List.of()
         );

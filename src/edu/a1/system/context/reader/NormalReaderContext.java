@@ -1,14 +1,11 @@
 package edu.a1.system.context.reader;
 
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
 
 import edu.a1.book.Book;
 import edu.a1.borrow.Borrow;
-import edu.a1.system.User;
 
 /**
  * Precondition: A reader is logged in

@@ -95,4 +95,24 @@ public class Book implements Serializable{
                 "authorName= " + authorName + '\n' +
                 "retailPrice= " + retailPrice;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(!(o instanceof Book)) {
+            return false;
+        }
+
+        Book b = (Book)o;
+        boolean ret = ISBN.equals(b.ISBN);
+
+        if(ret) {
+            assert(authorName.equals(b.authorName));
+            assert(bookName.equals(b.bookName));
+            assert(quantity == b.quantity);
+            assert(retailPrice == b.retailPrice);
+        }
+
+        return ret;
+    }
 }

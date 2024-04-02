@@ -3,7 +3,6 @@ package edu.a1.system.cmd;
 import java.util.List;
 
 import edu.a1.book.Book;
-import edu.a1.system.ConsoleInteraction;
 import edu.a1.system.LibrarySystem;
 
 /**
@@ -55,6 +54,22 @@ public class QueryBookCommand implements Command {
         }
     }
 
+    private void handleAllQuery() {
+
+        List<Book> books = LibrarySystem.bookStorage.findAll();
+
+        if(books.isEmpty()) {
+            LibrarySystem.getIO().writeTo("No books exist.");
+            return;
+        }
+
+        LibrarySystem.getIO().writeTo("A total of " + books.size() + " books found.");
+        for(int i = 0; i < books.size(); ++i) {
+            LibrarySystem.getIO().writeTo("Book " + i + ":");
+            LibrarySystem.getIO().writeTo(books.get(i).toString());
+        }
+    }
+
     /***************************************** override Command *****************************************/
     @Override
     public void handle(List<String> arguments) {
@@ -87,6 +102,13 @@ public class QueryBookCommand implements Command {
             handleCategoryQuery(arguments.get(1));
             break;
 
+        case "--all":
+            if(arguments.size() != 2) {
+                throw new IllegalArgumentException("Incorrect number of arguments.");
+            }
+            handleAllQuery();
+            break;
+
         default:
             throw new IllegalArgumentException("The option does not exist for this command.");
         }
@@ -99,9 +121,10 @@ public class QueryBookCommand implements Command {
             "query specific book(s) matching the given information",
             List.of(
                 "--ISBN <isbn>, where <isbn> is the ISBN of the book",
-                "--author-and-book-name <author> <bookname>, \n\t" +
-                    "where <author> is the author name, <bookname> is the bookname",
-                "--category <cat>, where <cat> is the category of the books"
+                "--author-and-book-name <author> <bookname>, \n" +
+                    "\t\twhere <author> is the author name, <bookname> is the bookname",
+                "--category <cat>, where <cat> is the category of the books",
+                "--all, returns all books"
             ), 
             List.of()
         );

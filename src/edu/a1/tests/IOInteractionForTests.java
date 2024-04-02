@@ -1,11 +1,5 @@
 package edu.a1.tests;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-
 import edu.a1.system.IOInteraction;
 
 public class IOInteractionForTests implements IOInteraction {
@@ -23,6 +17,10 @@ public class IOInteractionForTests implements IOInteraction {
 
     }
 
+    /**
+     * If no newline, then read all.
+     * Otherwise, read a line.
+     */
     @Override
     public String readLineFrom() {
 
@@ -38,7 +36,7 @@ public class IOInteractionForTests implements IOInteraction {
         else {
             ret = userOwnedBuffer.substring(0, newLineInd);
             // update the buffer.
-            userOwnedBuffer.delete(0, newLineInd);
+            userOwnedBuffer.delete(0, newLineInd+1);
         }
 
         return ret;
@@ -47,7 +45,7 @@ public class IOInteractionForTests implements IOInteraction {
     @Override
     public void writeTo(String msg) {
 
-        myOwnedBuffer.append(msg);
+        myOwnedBuffer.append(msg + "\n");
 
     }
     

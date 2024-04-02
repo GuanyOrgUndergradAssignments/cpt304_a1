@@ -188,7 +188,7 @@ public final class LibrarySystem {
         return new CommandResult(name, args);
     }
 
-    private static void handleCommandLine() {
+    public static void handleCommandLine() {
 
         String cmdLine = ioInteraction.readLineFrom();
         CommandResult res = interpretCommand(cmdLine);

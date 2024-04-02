@@ -167,12 +167,12 @@ public class ReaderBookOpCommand implements Command {
             "A reader uses this command to borrow/return books", 
             List.of(
                 "--borrow <isbn> <num> <return-date>\n" +
-                    "\t <isbn>: ISBN of the book to borrow\n" +
-                    "\t <num>: number of copies to borrow\n" +
-                    "\t <return-date>: when will you return the books\n",
+                    "\t\t <isbn>: ISBN of the book to borrow\n" +
+                    "\t\t <num>: number of copies to borrow\n" +
+                    "\t\t <return-date>: when will you return the books\n",
                 "--return <isbn> <num>" +
-                    "\t <isbn>: ISBN of the book to return\n" +
-                    "\t <num>: number of copies to return\n"
+                    "\t\t <isbn>: ISBN of the book to return\n" +
+                    "\t\t <num>: number of copies to return\n"
             ), 
             List.of()
         );
