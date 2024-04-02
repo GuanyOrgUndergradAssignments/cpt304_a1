@@ -49,7 +49,7 @@ public class Borrow implements Serializable {
         this.username = username;
         this.ISBN = ISBN;
         this.numBorrowed = numBorrowed;
-        this.numReturned = -1;
+        this.numReturned = 0;
         this.borrowedDate = LocalDateTime.now();
         this.declaredReturnDate = borrowedDate.plus(BORROWDAY, ChronoUnit.DAYS);
         this.returnedDate = null;
@@ -78,9 +78,12 @@ public class Borrow implements Serializable {
      * If no fine is needed, then fine := 0.0f.
      */
     public void calculateFine() {
+        // check the existence of return day
         if(returnedDate == null) {
             returnedDate = LocalDateTime.now();
         }
+
+        // fine by day
         if(ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) > 0){
             fine = ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) * FINEPERDAY;
         }else{

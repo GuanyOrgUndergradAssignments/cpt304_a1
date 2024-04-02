@@ -1,11 +1,15 @@
 package edu.a1.borrow;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.a1.book.Book;
+import edu.a1.database.BookManagement;
+import edu.a1.database.BorrowManagement;
+import edu.a1.database.UserManagement;
+import edu.a1.system.User;
 import edu.a1.system.context.reader.NormalReaderContext;
+import edu.a1.system.context.reader.ReaderContext;
 import edu.a1.system.context.reader.ReaderCtxDecorator;
 
 /**
@@ -14,20 +18,28 @@ import edu.a1.system.context.reader.ReaderCtxDecorator;
  * @author Guanyuming He, Kemu Xu
  */
 public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
-
+    NormalReaderContext normalReaderContext;
+    protected final List<Borrow> borrowHistory;
     // borrow histories that have unpaid fines.
     List<Borrow> unpaidBorrows;
+
+    User reader;
+    ReaderContext readerContext;
+    UserManagement userStorage;
+    BookManagement bookStorage;
+    BorrowManagement borrowStorage;
 
     /**
      * @param history loaded by the system from the database.
      */
     public FinedReaderCtxDecorator(List<Borrow> history) {
         super(new NormalReaderContext(history));
+        normalReaderContext = (NormalReaderContext) super.getWrapped();
+        borrowHistory = normalReaderContext.getBorrowHistory();
 
         // TODO: find unpaid borrows
         unpaidBorrows = new ArrayList<>();
-
-        throw new RuntimeException("Not implemented.");
+        getUnpaidBorrows();
     }
 
     /**
@@ -38,14 +50,11 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
     public void borrowBook(Book book, int numCopies) {
 
         // TODO: ask the reader to pay the fine.
-
-        // if he has paid all, then allow him to borrow
-        // if(unpaidBorrows.isEmpty()) 
-        // {
-        //     wrapped.borrowBook(book, numCopies, declaredReturnDate);
-        // }
-
-        throw new RuntimeException("Not implemented.");
+        if(unpaidBorrows.isEmpty()){
+            super.getWrapped().borrowBook(book, numCopies);
+        }else{
+            System.out.println("you have to pay all fines before borrow books");
+        }
     }
 
     /**
@@ -56,14 +65,27 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
     public void returnBook(Book book, int numCopies) {
 
         // TODO: ask the reader to pay the fine.
+        if (unpaidBorrows.isEmpty()){
+            super.getWrapped().returnBook(book, numCopies);
+        }else{
+            System.out.println("you have to pay all fines before return books");
+        }
+    }
 
-        // if he has paid all, then allow him to return
-        // if(unpaidBorrows.isEmpty()) 
-        // {
-        //     wrapped.returnBook(book, numCopies);
-        // }
+    public void payFine(List<Borrow> finedBorrows){
+        for (Borrow borrow : finedBorrows){
+            borrow.payFine();
+        }
+        getUnpaidBorrows();
+    }
 
-        throw new RuntimeException("Not implemented.");
+    public void getUnpaidBorrows(){
+        for(Borrow borrow : borrowHistory){
+            borrow.calculateFine();
+            if (!borrow.getFinePaid() && borrow.getFine() != 0){
+                unpaidBorrows.add(borrow);
+            }
+        }
     }
     
 }
