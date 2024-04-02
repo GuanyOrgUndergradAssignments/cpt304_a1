@@ -3,9 +3,6 @@ package edu.a1.book;
 import java.io.Serializable;
 
 // import package
-public class Book implements Serializable{
-
-import java.io.Serializable;
 
 public class Book implements Serializable{
 

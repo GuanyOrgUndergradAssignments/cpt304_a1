@@ -35,7 +35,7 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
      * if he has paid, then allow him to borrow
      */
     @Override
-    public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
+    public void borrowBook(Book book, int numCopies) {
 
         // TODO: ask the reader to pay the fine.
 

@@ -82,24 +82,18 @@ public class ReaderBookOpCommand implements Command {
 
         // Parse the arguments
         int num = -1;
-        Date returnDate = null;
         try {
             num = Integer.parseInt(numStr);
-            var dateFormat = DateFormat.getDateInstance();
-            returnDate = dateFormat.parse(returnDateStr);
         }
         catch(NumberFormatException e) {
             throw new IllegalArgumentException("Number format is incorrect: " + e.getMessage());
-        }
-        catch(ParseException e) {
-            throw new IllegalArgumentException("Return date format is incorrect: " + e.getMessage());
         }
         if(num <= 0) {
             throw new IllegalArgumentException("The borrow number must be positive.");
         }
 
         // Now everything is fine, handle the borrow
-        ctx.borrowBook(b, num, returnDate);
+        ctx.borrowBook(b, num);
 
     }
 

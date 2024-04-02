@@ -4,7 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +122,7 @@ public class BorrowManagement implements BorrowManager {
 
     // find by borrowedDate
     @Override 
-    public List<Borrow> findByBorrowedDate(Date borrowedDate) {
+    public List<Borrow> findByBorrowedDate(LocalDateTime borrowedDate) {
         List<Borrow> result = new ArrayList<>();
         for (Borrow record : records) {
             if (record.getBorrowedDate().equals(borrowedDate)) {
@@ -134,7 +134,7 @@ public class BorrowManagement implements BorrowManager {
 
     // find by returnedDate
     @Override
-    public List<Borrow> findByReturnedDate(Date returnedDate) {
+    public List<Borrow> findByReturnedDate(LocalDateTime returnedDate) {
         List<Borrow> result = new ArrayList<>();
         for (Borrow record : records) {
             if (record.getReturnedDate() != null && record.getReturnedDate().equals(returnedDate)) {
@@ -146,7 +146,7 @@ public class BorrowManagement implements BorrowManager {
 
     // find by declaredReturnDate
     @Override
-    public List<Borrow> findByDeclaredReturnDate(Date declaredReturnDate) {
+    public List<Borrow> findByDeclaredReturnDate(LocalDateTime declaredReturnDate) {
         List<Borrow> result = new ArrayList<>();
         for (Borrow record : records) {
             if (record.getDeclaredReturnDate() != null && record.getReturnedDate().equals(declaredReturnDate)) {
@@ -157,7 +157,7 @@ public class BorrowManagement implements BorrowManager {
     }
 
     @Override
-    public Borrow findByStartTimeAndUsername(String username, Date start){
+    public Borrow findByStartTimeAndUsername(String username, LocalDateTime start){
         for (Borrow borrow : records) {
             if (borrow.getUsername().equals(username) && borrow.getBorrowedDate().equals(start)) {
                 return borrow;
@@ -167,7 +167,7 @@ public class BorrowManagement implements BorrowManager {
     }
 
     @Override
-    public Borrow findByEndTimeAndUsername(String username, Date end){
+    public Borrow findByEndTimeAndUsername(String username, LocalDateTime end){
         for (Borrow borrow : records) {
             if (borrow.getUsername().equals(username) && borrow.getReturnedDate().equals(end)) {
                 return borrow;

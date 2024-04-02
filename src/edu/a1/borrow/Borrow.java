@@ -1,29 +1,60 @@
 package edu.a1.borrow;
+import edu.a1.database.BorrowManagement;
+import edu.a1.database.BorrowManager;
+
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Borrow implements Serializable {
+    // attributes
     private int borrowID;
     private String username;
     private String ISBN;
     private int numBorrowed;
+    // -1 stands for no return
     private int numReturned;
-    private Date borrowedDate;
-    private Date declaredReturnDate;
+    private LocalDateTime borrowedDate;
+    private LocalDateTime declaredReturnDate;
     // Null if not returned
-    private Date returnedDate;
+    private LocalDateTime returnedDate;
     // Stored to database
     // but only meaningful if fine != 0.0f
     private boolean finePaid = false;
 
     // Not stored in database
     // calculated whenever used.
-    private float fine = 0.0f;
+    private float fine;
+    private final float FINEPERDAY = 0.5f;
+    private final int BORROWDAY = 30;
+
+    private BorrowManagement borrowManagement;
 
     /**
      * SQL needs the default ctor.
      */
-    public Borrow() {}
+    public Borrow(String username, String ISBN, int numBorrowed) {
+        borrowManagement = new BorrowManagement();
+        // set ID
+        int maxID = Integer.MIN_VALUE;
+
+        for (Borrow borrow : borrowManagement.findAll()) {
+            int currentID = borrow.getBorrowID();
+            if (currentID > maxID) {
+                maxID = currentID;
+            }
+        }
+        this.borrowID = maxID + 1;
+        this.username = username;
+        this.ISBN = ISBN;
+        this.numBorrowed = numBorrowed;
+        this.numReturned = -1;
+        this.borrowedDate = LocalDateTime.now();
+        this.declaredReturnDate = borrowedDate.plus(BORROWDAY, ChronoUnit.DAYS);
+        this.returnedDate = null;
+        this.finePaid = false;
+    }
 
     public boolean getFinePaid() {
         return finePaid;
@@ -35,6 +66,8 @@ public class Borrow implements Serializable {
      * If the system decides that the fine is paid, then call this.
      */
     public void payFine() {
+        setReturnedDate(LocalDateTime.now());
+        calculateFine();
         finePaid = true;
     }
 
@@ -45,19 +78,30 @@ public class Borrow implements Serializable {
      * If no fine is needed, then fine := 0.0f.
      */
     public void calculateFine() {
-        throw new RuntimeException("Not implemented");
+        if(returnedDate == null) {
+            returnedDate = LocalDateTime.now();
+        }
+        if(ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) > 0){
+            fine = ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) * FINEPERDAY;
+        }else{
+            fine = 0;
+        }
+
     }
     public float getFine() {
         return fine;
     }
     /** @return if fine != 0.0f */
-    public boolean isFined() { return getFine() != 0.0f; }
+    public boolean isFined() {
+        calculateFine();
+        return getFine() != 0.0f;
+    }
 
-    public Date getReturnedDate() {
+    public LocalDateTime getReturnedDate() {
         return returnedDate;
     }
 
-    public void setReturnedDate(Date returnedDate) {
+    public void setReturnedDate(LocalDateTime returnedDate) {
         this.returnedDate = returnedDate;
     }
 
@@ -106,19 +150,19 @@ public class Borrow implements Serializable {
         return numBorrowed == numReturned;
     }
 
-    public Date getBorrowedDate() {
+    public LocalDateTime getBorrowedDate() {
         return borrowedDate;
     }
 
-    public void setBorrowedDate(Date startTime) {
+    public void setBorrowedDate(LocalDateTime startTime) {
         this.borrowedDate = startTime;
     }
 
-    public Date getDeclaredReturnDate() {
+    public LocalDateTime getDeclaredReturnDate() {
         return declaredReturnDate;
     }
 
-    public void setDeclaredReturnDate(Date endTime) {
+    public void setDeclaredReturnDate(LocalDateTime endTime) {
         this.declaredReturnDate = endTime;
     }
 }

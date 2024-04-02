@@ -8,6 +8,8 @@ import javax.management.RuntimeErrorException;
 
 import edu.a1.book.Book;
 import edu.a1.borrow.Borrow;
+import edu.a1.database.BookManagement;
+import edu.a1.database.BorrowManagement;
 import edu.a1.system.User;
 
 /**
@@ -18,6 +20,8 @@ import edu.a1.system.User;
 public class NormalReaderContext implements ReaderContext  {
 
     protected final List<Borrow> borrowHistory;
+    BookManagement bookManagement = new BookManagement();
+    BorrowManagement borrowManagement = new BorrowManagement();
 
     /**
      * @param history loaded by the system from the database.
@@ -38,8 +42,16 @@ public class NormalReaderContext implements ReaderContext  {
      *  2. ALL of the information about the borrow is stored in the reader's database entry in some way.
      */
     @Override
-    public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
-        throw new RuntimeException("Unimplemented method 'borrowBook'");
+    public void borrowBook(Book book, int numCopies) {
+        List<Book> statisfiedBooks = bookManagement.findByBookName(book.getBookName());
+        boolean bookExits = (statisfiedBooks != null);
+
+        if (bookExits){
+            int availableNum = statisfiedBooks.get(0).getQuantity();
+            if (availableNum >= numCopies){
+
+            }
+        }
     }
 
     /**
