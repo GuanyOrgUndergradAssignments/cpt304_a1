@@ -194,7 +194,7 @@ public final class LibrarySystem {
         var handler = commands.get(res.name);
 
         // handle the help arg if --help is found
-        if(res.args.size() >= 1 && res.args.get(1).equals("--help")) {
+        if(res.args.size() >= 1 && res.args.get(0).equals("--help")) {
             ConsoleInteraction.writeToConsole(handler.helpMessage());
         }
         // otherwise use the handler.
