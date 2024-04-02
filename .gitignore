@@ -1,4 +1,5 @@
-# Java
+# Serialized files
+*.ser
 
 # Compiled class file
 *.class

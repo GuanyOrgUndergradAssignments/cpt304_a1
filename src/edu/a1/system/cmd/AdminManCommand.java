@@ -219,7 +219,7 @@ public class AdminManCommand implements Command {
         }
 
         // No exception means success.
-        ConsoleInteraction.writeToConsole("Administrative operation completed successfully.");
+        LibrarySystem.getIO().writeTo("Administrative operation completed successfully.");
     }
 
     @Override

@@ -46,7 +46,7 @@ public class BorrowHistoryCommand implements Command {
         var borrows = bdb.findByUsername(username);
         for(var b : borrows) {
             b.calculateFine();
-            ConsoleInteraction.writeToConsole(b.toString());
+            LibrarySystem.getIO().writeTo(b.toString());
         }
 
     }
