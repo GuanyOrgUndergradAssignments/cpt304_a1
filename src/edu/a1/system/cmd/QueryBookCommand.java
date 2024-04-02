@@ -18,40 +18,40 @@ public class QueryBookCommand implements Command {
     /***************************************** Helpers *****************************************/
     private void handleISBNQuery(String isbn) {
         if(!LibrarySystem.bookStorage.existBook(isbn)) {
-            ConsoleInteraction.writeToConsole("No book has the ISBN.");
+            LibrarySystem.getIO().writeTo("No book has the ISBN.");
             return;
         }
 
         Book book = LibrarySystem.bookStorage.findByISBN(isbn);
         assert(book != null);
-        ConsoleInteraction.writeToConsole("Book found:");
-        ConsoleInteraction.writeToConsole(book.toString());
+        LibrarySystem.getIO().writeTo("Book found:");
+        LibrarySystem.getIO().writeTo(book.toString());
     }
 
     private void handleAuthorBookNameQuery(String author, String bookname) {
         Book book = LibrarySystem.bookStorage.findByBookNameAndAuthor(bookname, author);
         
         if(book == null) {
-            ConsoleInteraction.writeToConsole("No book has the author and bookname.");
+            LibrarySystem.getIO().writeTo("No book has the author and bookname.");
             return;
         }
 
-        ConsoleInteraction.writeToConsole("Book found:");
-        ConsoleInteraction.writeToConsole(book.toString());
+        LibrarySystem.getIO().writeTo("Book found:");
+        LibrarySystem.getIO().writeTo(book.toString());
     }
 
     private void handleCategoryQuery(String category) {
         List<Book> books = LibrarySystem.bookStorage.findByBookCategory(category);
 
         if(books.isEmpty()) {
-            ConsoleInteraction.writeToConsole("No book has the category.");
+            LibrarySystem.getIO().writeTo("No book has the category.");
             return;
         }
 
-        ConsoleInteraction.writeToConsole("A total of " + books.size() + " books found.");
+        LibrarySystem.getIO().writeTo("A total of " + books.size() + " books found.");
         for(int i = 0; i < books.size(); ++i) {
-            ConsoleInteraction.writeToConsole("Book " + i + ":");
-            ConsoleInteraction.writeToConsole(books.get(i).toString());
+            LibrarySystem.getIO().writeTo("Book " + i + ":");
+            LibrarySystem.getIO().writeTo(books.get(i).toString());
         }
     }
 

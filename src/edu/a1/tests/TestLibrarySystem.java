@@ -23,9 +23,12 @@ import edu.a1.system.cmd.ReaderBookOpCommand;
  */
 public class TestLibrarySystem {
     
+    private static StringBuilder inputBuffer;
+
     @BeforeAll
     public static void initLibrarySystem() {
-        LibrarySystem.initLibrarySystem();
+        inputBuffer = new StringBuilder("");
+        LibrarySystem.initLibrarySystem(new IOInteractionForTests(inputBuffer));
     }
 
     /**

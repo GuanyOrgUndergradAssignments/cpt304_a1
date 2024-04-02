@@ -19,7 +19,7 @@ public class LogoutCommand implements Command {
         LibrarySystem.authenticator.logout();
 
         // no exception thrown means success.
-        ConsoleInteraction.writeToConsole("Logged out.");
+        LibrarySystem.getIO().writeTo("Logged out.");
     }
 
     @Override

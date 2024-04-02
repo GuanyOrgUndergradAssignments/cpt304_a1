@@ -36,8 +36,14 @@ import edu.a1.system.cmd.ReaderBookOpCommand;
  */
 public final class LibrarySystem {
    
+    // IOInteraction interface.
+    private static IOInteraction ioInteraction;
+    public static IOInteraction getIO() { return ioInteraction; }
+
     // Internal data
-    private static Map<String, Command> commands; // will be immutable
+    /** will be created immutable */
+    private static Map<String, Command> commands;
+    public static Map<String, Command> getCommands() { return commands; }
     private static boolean exit = false;
 
     // System states
@@ -61,15 +67,6 @@ public final class LibrarySystem {
     }
 
     /**
-     * commands will be created immutable, but itself is not final.
-     * Therefore, one can only get it.
-     * @return
-     */
-    public static Map<String, Command> getCommands() {
-        return commands;
-    }
-
-    /**
      * @return the date today
      */
     private static Date findToday() {
@@ -77,10 +74,19 @@ public final class LibrarySystem {
     }
 
     /**
-     * Creates the commands
+     * Initialises the system.
+     * @param ioInteraction how will the system interact with the user
      */
-    public static void initLibrarySystem() {
+    public static void initLibrarySystem(IOInteraction io) {
 
+        // init io
+        {
+            if(io == null) {
+                throw new IllegalArgumentException("The IO interaction cannot be null.");
+            }
+            ioInteraction = io;
+        }
+        
         // init the states
         {
             today = findToday();
@@ -184,7 +190,7 @@ public final class LibrarySystem {
 
     private static void handleCommandLine() {
 
-        String cmdLine = ConsoleInteraction.readFromConsole();
+        String cmdLine = ioInteraction.readLineFrom();
         CommandResult res = interpretCommand(cmdLine);
 
         if(!commands.containsKey(res.name)) {
@@ -195,7 +201,7 @@ public final class LibrarySystem {
 
         // handle the help arg if --help is found
         if(res.args.size() >= 1 && res.args.get(0).equals("--help")) {
-            ConsoleInteraction.writeToConsole(handler.helpMessage());
+            ioInteraction.writeTo(handler.helpMessage());
         }
         // otherwise use the handler.
         else {
@@ -213,6 +219,9 @@ public final class LibrarySystem {
      * Handles command until the exit command is called.
      */
     public static void mainLoop() {
+
+        assert(ioInteraction != null);
+
         while(!exit) {
             // Errors from commands are reported as exceptions.
             // print error messages to the console.
@@ -220,14 +229,14 @@ public final class LibrarySystem {
                 handleCommandLine();
             }
             catch(Exception e) {
-                ConsoleInteraction.writeToConsole("Error: " + e.getMessage());
+                ioInteraction.writeTo("Error: " + e.getMessage());
             }
         }
     }
 
     public static void main(String[] args) {
 
-        LibrarySystem.initLibrarySystem();
+        LibrarySystem.initLibrarySystem(new ConsoleInteraction());
         LibrarySystem.mainLoop();
 
     }

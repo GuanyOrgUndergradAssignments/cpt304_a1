@@ -18,12 +18,16 @@ import edu.a1.system.auth.SystemAuthenticator;
 public class TestAuthentication {
 
     private static UserManager usrDB;
+    private static StringBuilder inputBuffer;
 
     @BeforeAll
     public static void setUpDatabase() {
-        LibrarySystem.initLibrarySystem();
+
+        inputBuffer = new StringBuilder("");
+        LibrarySystem.initLibrarySystem(new IOInteractionForTests(inputBuffer));
         usrDB = LibrarySystem.userStorage;
         usrDB.save(new User("test_abc", "123456"));
+
     }
 
     @AfterAll

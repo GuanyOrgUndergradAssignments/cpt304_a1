@@ -27,7 +27,7 @@ public class LoginCommand implements Command {
         LibrarySystem.authenticator.login(username, password);
 
         // no exception thrown means success.
-        ConsoleInteraction.writeToConsole("Logged in as " + username);
+        LibrarySystem.getIO().writeTo("Logged in as " + username);
     }
 
     @Override

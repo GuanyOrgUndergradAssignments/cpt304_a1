@@ -24,7 +24,7 @@ public class ChangePwdCommand implements Command {
         LibrarySystem.authenticator.changePassword(newpwd);
 
         // no exception means success
-        ConsoleInteraction.writeToConsole("Password changed. Please log in again.");
+        LibrarySystem.getIO().writeTo("Password changed. Please log in again.");
     }
 
     @Override
