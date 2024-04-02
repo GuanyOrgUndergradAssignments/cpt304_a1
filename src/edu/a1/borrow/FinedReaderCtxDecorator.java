@@ -7,6 +7,7 @@ import edu.a1.book.Book;
 import edu.a1.database.BookManagement;
 import edu.a1.database.BorrowManagement;
 import edu.a1.database.UserManagement;
+import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 import edu.a1.system.context.reader.NormalReaderContext;
 import edu.a1.system.context.reader.ReaderContext;
@@ -22,12 +23,6 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
     protected final List<Borrow> borrowHistory;
     // borrow histories that have unpaid fines.
     List<Borrow> unpaidBorrows;
-
-    User reader;
-    ReaderContext readerContext;
-    UserManagement userStorage;
-    BookManagement bookStorage;
-    BorrowManagement borrowStorage;
 
     /**
      * @param history loaded by the system from the database.
@@ -51,7 +46,7 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
 
         // TODO: ask the reader to pay the fine.
         if(unpaidBorrows.isEmpty()){
-            super.getWrapped().borrowBook(book, numCopies);
+            super.borrowBook(book, numCopies);
         }else{
             System.out.println("you have to pay all fines before borrow books");
         }
@@ -66,9 +61,22 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
 
         // TODO: ask the reader to pay the fine.
         if (unpaidBorrows.isEmpty()){
-            super.getWrapped().returnBook(book, numCopies);
+            super.returnBook(book, numCopies);
         }else{
-            System.out.println("you have to pay all fines before return books");
+            LibrarySystem.getIO().writeTo("You have to pay all fines before return books. yes/no");
+            while(LibrarySystem.getIO().readLineFrom().equals("yes") && LibrarySystem.getIO().readLineFrom().equals("no")){
+                String cmdLine = LibrarySystem.getIO().readLineFrom();
+                if (cmdLine.equals("yes")){
+                    payFine(unpaidBorrows);
+                    LibrarySystem.getIO().writeTo("You have paid fines.");
+                    super.returnBook(book, numCopies);
+                    LibrarySystem.getIO().writeTo("You have returned borrowed book.");
+                }else if (cmdLine.equals("no")){
+                    LibrarySystem.getIO().writeTo("Return failed. You have to pay all fines before return books.");
+                }else{
+                    LibrarySystem.getIO().writeTo("The command is incorrent, please type yes/no.");
+                }
+            }
         }
     }
 
@@ -82,10 +90,9 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
     public void getUnpaidBorrows(){
         for(Borrow borrow : borrowHistory){
             borrow.calculateFine();
-            if (!borrow.getFinePaid() && borrow.getFine() != 0){
+            if (borrow.getFinePaid() == false && borrow.getFine() != 0){
                 unpaidBorrows.add(borrow);
             }
         }
     }
-    
 }

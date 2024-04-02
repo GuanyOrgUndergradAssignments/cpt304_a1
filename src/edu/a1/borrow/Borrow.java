@@ -3,9 +3,10 @@ import edu.a1.database.BorrowManagement;
 import edu.a1.database.BorrowManager;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Borrow implements Serializable {
     // attributes
@@ -15,10 +16,10 @@ public class Borrow implements Serializable {
     private int numBorrowed;
     // -1 stands for no return
     private int numReturned;
-    private LocalDateTime borrowedDate;
-    private LocalDateTime declaredReturnDate;
+    private Date borrowedDate;
+    private Date declaredReturnDate;
     // Null if not returned
-    private LocalDateTime returnedDate;
+    private Date returnedDate;
     // Stored to database
     // but only meaningful if fine != 0.0f
     private boolean finePaid = false;
@@ -50,8 +51,13 @@ public class Borrow implements Serializable {
         this.ISBN = ISBN;
         this.numBorrowed = numBorrowed;
         this.numReturned = 0;
-        this.borrowedDate = LocalDateTime.now();
-        this.declaredReturnDate = borrowedDate.plus(BORROWDAY, ChronoUnit.DAYS);
+        this.borrowedDate = Date.from(Instant.now());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(borrowedDate);
+        calendar.add(Calendar.DAY_OF_MONTH, BORROWDAY);
+        this.declaredReturnDate = calendar.getTime();
+
         this.returnedDate = null;
         this.finePaid = false;
     }
@@ -66,7 +72,7 @@ public class Borrow implements Serializable {
      * If the system decides that the fine is paid, then call this.
      */
     public void payFine() {
-        setReturnedDate(LocalDateTime.now());
+        setReturnedDate(Date.from(Instant.now()));
         calculateFine();
         finePaid = true;
     }
@@ -80,12 +86,12 @@ public class Borrow implements Serializable {
     public void calculateFine() {
         // check the existence of return day
         if(returnedDate == null) {
-            returnedDate = LocalDateTime.now();
+            returnedDate = Date.from(Instant.now());
         }
 
         // fine by day
-        if(ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) > 0){
-            fine = ChronoUnit.DAYS.between(declaredReturnDate, returnedDate) * FINEPERDAY;
+        if(ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) > 0){
+            fine = ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) * FINEPERDAY;
         }else{
             fine = 0;
         }
@@ -100,11 +106,11 @@ public class Borrow implements Serializable {
         return getFine() != 0.0f;
     }
 
-    public LocalDateTime getReturnedDate() {
+    public Date getReturnedDate() {
         return returnedDate;
     }
 
-    public void setReturnedDate(LocalDateTime returnedDate) {
+    public void setReturnedDate(Date returnedDate) {
         this.returnedDate = returnedDate;
     }
 
@@ -153,19 +159,19 @@ public class Borrow implements Serializable {
         return numBorrowed == numReturned;
     }
 
-    public LocalDateTime getBorrowedDate() {
+    public Date getBorrowedDate() {
         return borrowedDate;
     }
 
-    public void setBorrowedDate(LocalDateTime startTime) {
+    public void setBorrowedDate(Date startTime) {
         this.borrowedDate = startTime;
     }
 
-    public LocalDateTime getDeclaredReturnDate() {
+    public Date getDeclaredReturnDate() {
         return declaredReturnDate;
     }
 
-    public void setDeclaredReturnDate(LocalDateTime endTime) {
+    public void setDeclaredReturnDate(Date endTime) {
         this.declaredReturnDate = endTime;
     }
 }

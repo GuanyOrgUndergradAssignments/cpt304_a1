@@ -1,6 +1,5 @@
 package edu.a1.system.context.reader;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +113,7 @@ public class NormalReaderContext implements ReaderContext  {
         List<Borrow> borrowHistory = borrowStorage.findByISBN(book.getISBN());
 
         // check the user's borrow history includes the book
-        if(borrowHistory == null){
+        if(borrowHistory.isEmpty()){
             System.out.println("no borrow history");
         }else{
             List<Borrow> borrows = new ArrayList<>();
@@ -125,7 +124,7 @@ public class NormalReaderContext implements ReaderContext  {
                     borrows.add(borrow);
                 }
             }
-            if (borrows == null){
+            if (borrows.isEmpty()){
                 System.out.println("borrow books all returned");
             }else{
                 // update the return book in borrow storage
