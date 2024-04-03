@@ -1,5 +1,5 @@
 package edu.a1.database;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import edu.a1.borrow.Borrow;
