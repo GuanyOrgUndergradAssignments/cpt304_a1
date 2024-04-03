@@ -12,7 +12,9 @@ import edu.a1.system.auth.SystemAuthenticator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,13 +39,14 @@ public class TestFinedReaderCtxDecorator {
         userStorage.save(reader);
         Book book = new Book("Foundations of Computer Vision", "9780262048972", 1, "Computer Science", "2024", "Antonio Torralba, Phillip Isola and William T. Freeman", 90.00);
         bookStorage.save(book);
-        Borrow borrow = new Borrow("kemu", "9780262048972", 1);
+        Borrow borrow = new Borrow("kemu", "9780262048972", 1, Date.from(Instant.now()));
+        borrowStorage.save(borrow);
 
         List<Borrow> borrowHistory = new ArrayList<>();
         borrowHistory.add(borrow);
 
         FinedReaderCtxDecorator finedReaderCtxDecorator = new FinedReaderCtxDecorator(borrowHistory);
-        finedReaderCtxDecorator.borrowBook(book, 1);
+        finedReaderCtxDecorator.borrowBook(book, 1, Date.from(Instant.now()));
         finedReaderCtxDecorator.returnBook(book, 1);
     }
 }

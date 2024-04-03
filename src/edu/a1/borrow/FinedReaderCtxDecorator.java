@@ -1,6 +1,7 @@
 package edu.a1.borrow;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.a1.book.Book;
@@ -42,11 +43,11 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
      * if he has paid, then allow him to borrow
      */
     @Override
-    public void borrowBook(Book book, int numCopies) {
+    public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
 
         // TODO: ask the reader to pay the fine.
         if(unpaidBorrows.isEmpty()){
-            super.borrowBook(book, numCopies);
+            super.borrowBook(book, numCopies, declaredReturnDate);
         }else{
             System.out.println("you have to pay all fines before borrow books");
         }

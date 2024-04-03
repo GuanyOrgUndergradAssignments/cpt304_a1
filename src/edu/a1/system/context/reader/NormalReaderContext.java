@@ -1,6 +1,7 @@
 package edu.a1.system.context.reader;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
@@ -69,9 +70,9 @@ public class NormalReaderContext implements ReaderContext  {
      *  2. ALL of the information about the borrow is stored in the reader's database entry in some way.
      */
     @Override
-    public void borrowBook(Book book, int numCopies) {
+    public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
         List<Book> statisfiedBooks = bookStorage.findByBookName(book.getBookName());
-        boolean bookExits = (statisfiedBooks != null);
+        boolean bookExits = statisfiedBooks.isEmpty();
 
         // check existence
         if (bookExits){
@@ -87,7 +88,7 @@ public class NormalReaderContext implements ReaderContext  {
                 bookStorage.replace(instoreBook, newBook);
 
                 //save in storage
-                Borrow borrow = new Borrow(reader.getUsername(), book.getISBN(), numCopies);
+                Borrow borrow = new Borrow(reader.getUsername(), book.getISBN(), numCopies, declaredReturnDate);
                 borrowStorage.save(borrow);
 
                 System.out.println("success borrow");
