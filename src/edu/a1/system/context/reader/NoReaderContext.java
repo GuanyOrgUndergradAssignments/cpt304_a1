@@ -14,7 +14,7 @@ public final class NoReaderContext implements ReaderContext {
      * Not supported if no reader is logged in.
      */
     @Override
-    public void borrowBook(Book book, int numCopies) {
+    public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
         throw new UnsupportedOperationException("A reader is not logged in.");
     }
 

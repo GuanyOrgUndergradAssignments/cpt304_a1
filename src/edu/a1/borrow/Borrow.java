@@ -35,7 +35,7 @@ public class Borrow implements Serializable {
     /**
      * SQL needs the default ctor.
      */
-    public Borrow(String username, String ISBN, int numBorrowed) {
+    public Borrow(String username, String ISBN, int numBorrowed, Date declaredReturnDate) {
         borrowManagement = new BorrowManagement();
         // set ID
         int maxID = Integer.MIN_VALUE;
@@ -52,11 +52,7 @@ public class Borrow implements Serializable {
         this.numBorrowed = numBorrowed;
         this.numReturned = 0;
         this.borrowedDate = Date.from(Instant.now());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(borrowedDate);
-        calendar.add(Calendar.DAY_OF_MONTH, BORROWDAY);
-        this.declaredReturnDate = calendar.getTime();
+        this.declaredReturnDate = declaredReturnDate;
 
         this.returnedDate = null;
         this.finePaid = false;

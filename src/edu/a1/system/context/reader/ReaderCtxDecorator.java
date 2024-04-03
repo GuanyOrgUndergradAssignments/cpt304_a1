@@ -3,6 +3,7 @@ package edu.a1.system.context.reader;
 import edu.a1.book.Book;
 import edu.a1.borrow.Borrow;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +24,8 @@ public abstract class ReaderCtxDecorator implements ReaderContext {
     }
 
     @Override
-    public void borrowBook(Book book, int numCopies){
-        wrapped.borrowBook(book, numCopies);
+    public void borrowBook(Book book, int numCopies, Date declaredReturnDate){
+        wrapped.borrowBook(book, numCopies, declaredReturnDate);
     }
 
     @Override

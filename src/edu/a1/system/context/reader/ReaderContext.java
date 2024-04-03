@@ -19,7 +19,7 @@ public interface ReaderContext {
      * @param book before this method is called, the book to be borrowed is found from the database.
      * @param numCopies
      */
-    public void borrowBook(Book book, int numCopies);
+    public void borrowBook(Book book, int numCopies, Date declaredReturnDate);
 
     /**
      * Try to return numCopies of book.
