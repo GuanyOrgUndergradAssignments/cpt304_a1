@@ -14,7 +14,7 @@ import edu.a1.system.context.reader.NormalReaderContext;
 import edu.a1.system.context.reader.ReaderContext;
 import edu.a1.system.context.reader.ReaderCtxDecorator;
 
-/**
+/**s
  * Precondition:
  *  A reader with unpaid fines is logged in.
  * @author Kemu Xu
@@ -94,8 +94,7 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
 
     public void getUnpaidBorrows(){
         for(Borrow borrow : borrowHistory){
-            borrow.calculateFine();
-            if (borrow.getFinePaid() == false && borrow.getFine() != 0){
+            if (!borrow.getFinePaid() && borrow.getFine() != 0){
                 unpaidBorrows.add(borrow);
             }
         }

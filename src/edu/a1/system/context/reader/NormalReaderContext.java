@@ -1,5 +1,6 @@
 package edu.a1.system.context.reader;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +69,7 @@ public class NormalReaderContext implements ReaderContext  {
     @Override
     public void borrowBook(Book book, int numCopies, Date declaredReturnDate) {
         List<Book> statisfiedBooks = bookStorage.findByBookName(book.getBookName());
-        boolean bookExits = statisfiedBooks.isEmpty();
+        boolean bookExits = !statisfiedBooks.isEmpty();
 
         // check existence
         if (bookExits){
@@ -126,6 +127,7 @@ public class NormalReaderContext implements ReaderContext  {
                 Borrow borrowOrigin = borrows.get(0);
                 Borrow borrowUpdate = borrowOrigin;
                 borrowUpdate.setNumReturned(borrowUpdate.getNumReturned() + numCopies);
+                borrowUpdate.setReturnedDate(Date.from(Instant.now()));
                 borrowStorage.replace(borrowOrigin, borrowUpdate);
 
                 //update book in book storage
