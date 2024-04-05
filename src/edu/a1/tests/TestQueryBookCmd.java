@@ -138,7 +138,7 @@ public class TestQueryBookCmd {
         outBuffer.delete(0, outBuffer.length());
 
         // Set up the QueryBookCommand
-        inputCommand("query-book --all ");
+        inputCommand("query-book --all");
         var out = outBuffer.toString();
 
         // Assert that the expected output is present in the output buffer
@@ -192,7 +192,7 @@ public class TestQueryBookCmd {
         outBuffer.delete(0, outBuffer.length());
 
         // Set up the QueryBookCommand
-        inputCommand("query-book --all ");
+        inputCommand("query-book --all");
 
         var out = outBuffer.toString();
 
