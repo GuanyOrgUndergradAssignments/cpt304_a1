@@ -64,7 +64,7 @@ public class UserManagement implements UserManager{
         }
     }
 
-    @Override
+/*    @Override
     public void replace(User originalUser, User newUser) {
         if (existUser(newUser.getUsername())) {
             LibrarySystem.getIO().writeTo("New user has the same username as an existing user. Cannot replace.");
@@ -77,7 +77,21 @@ public class UserManagement implements UserManager{
                 LibrarySystem.getIO().writeTo("Original user not found. Cannot replace.");
             }
         }
+    }*/
+
+    @Override
+    public void replace(User originalUser, User newUser) {
+        if (!existUser(originalUser.getUsername())) {
+            LibrarySystem.getIO().writeTo("Original user does not exist. Cannot replace.");
+        } else {
+            int index = users.indexOf(originalUser);
+            if (index != -1) {
+                users.set(index, newUser);
+                LibrarySystem.getIO().writeTo("User replaced successfully.");
+            }
+        }
     }
+
 
     // get all users
     @Override

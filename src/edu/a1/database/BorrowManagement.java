@@ -11,6 +11,7 @@ import java.util.List;
 import edu.a1.borrow.Borrow;
 import edu.a1.system.IOInteraction;
 import edu.a1.system.LibrarySystem;
+import edu.a1.system.User;
 
 public class BorrowManagement implements BorrowManager {
     private List<Borrow> records;
@@ -66,7 +67,7 @@ public class BorrowManagement implements BorrowManager {
     }
 
     // replace
-    @Override
+    /*@Override
     public void replace(Borrow originalBorrow, Borrow newBorrow) {
         if (existRecord(newBorrow.getBorrowID())) {
             LibrarySystem.getIO().writeTo("New record has the same borrow ID as an existing record. Cannot replace.");
@@ -77,6 +78,18 @@ public class BorrowManagement implements BorrowManager {
                 LibrarySystem.getIO().writeTo("Record replaced successfully.");
             } else {
                 LibrarySystem.getIO().writeTo("Original record not found. Cannot replace.");
+            }
+        }
+    }*/
+    @Override
+    public void replace(Borrow originalBorrow, Borrow newBorrow) {
+        if (!existRecord(originalBorrow.getBorrowID())) {
+            LibrarySystem.getIO().writeTo("Original record does not exist. Cannot replace.");
+        } else {
+            int index = records.indexOf(originalBorrow);
+            if (index != -1) {
+                records.set(index, newBorrow);
+                LibrarySystem.getIO().writeTo("Record replaced successfully.");
             }
         }
     }

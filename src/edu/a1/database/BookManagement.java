@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.a1.book.Book;
+import edu.a1.borrow.Borrow;
 import edu.a1.system.IOInteraction;
 import edu.a1.system.LibrarySystem;
 
@@ -68,7 +69,7 @@ public class BookManagement implements BookManager {
     
 
     // replace
-    @Override
+/*    @Override
     public void replace(Book originalBook, Book newBook) {
         if (existBook(newBook.getISBN())) {
             LibrarySystem.getIO().writeTo("New book has the same ISBN as an existing book. Cannot replace.");
@@ -79,6 +80,19 @@ public class BookManagement implements BookManager {
                 LibrarySystem.getIO().writeTo("Book replaced successfully.");
             } else {
                 LibrarySystem.getIO().writeTo("Original book not found. Cannot replace.");
+            }
+        }
+    }*/
+
+    @Override
+    public void replace(Book originalBook, Book newBook) {
+        if (!existBook(originalBook.getISBN())) {
+            LibrarySystem.getIO().writeTo("Original book does not exist. Cannot replace.");
+        } else {
+            int index = books.indexOf(originalBook);
+            if (index != -1) {
+                books.set(index, newBook);
+                LibrarySystem.getIO().writeTo("Book replaced successfully.");
             }
         }
     }
