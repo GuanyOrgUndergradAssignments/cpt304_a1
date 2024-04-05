@@ -43,6 +43,10 @@ public class BorrowHistoryCommand implements Command {
         // Now everything is fine. Print the borrow history.
         var bdb = LibrarySystem.borrowStorage;
         var borrows = bdb.findByUsername(username);
+        if(borrows.isEmpty()) {
+            LibrarySystem.getIO().writeTo("No borrows in the past.");
+            return;
+        }
         for(var b : borrows) {
             b.calculateFine();
             LibrarySystem.getIO().writeTo(b.toString());
