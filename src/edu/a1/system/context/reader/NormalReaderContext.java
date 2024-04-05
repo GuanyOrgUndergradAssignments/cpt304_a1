@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import edu.a1.book.Book;
 import edu.a1.borrow.Borrow;
 import edu.a1.database.BookManagement;
@@ -15,7 +14,7 @@ import edu.a1.system.User;
 /**
  * Precondition: A reader is logged in
  * 
- * @author Guanyuming He, Kemu Xu
+ * @author Kemu Xu
  */
 public class NormalReaderContext implements ReaderContext  {
 

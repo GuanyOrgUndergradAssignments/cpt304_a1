@@ -2,8 +2,6 @@ package edu.a1.system;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;

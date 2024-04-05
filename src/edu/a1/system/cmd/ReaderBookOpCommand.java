@@ -1,7 +1,7 @@
 package edu.a1.system.cmd;
 
-import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +85,7 @@ public class ReaderBookOpCommand implements Command {
         Date returnDate = null;
         try {
             num = Integer.parseInt(numStr);
-            var dateFormat = DateFormat.getDateInstance();
+            var dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             returnDate = dateFormat.parse(returnDateStr);
         }
         catch(NumberFormatException e) {

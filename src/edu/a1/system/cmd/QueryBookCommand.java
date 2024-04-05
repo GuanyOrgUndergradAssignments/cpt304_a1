@@ -74,7 +74,7 @@ public class QueryBookCommand implements Command {
     @Override
     public void handle(List<String> arguments) {
 
-        if(arguments.size() < 2) {
+        if(arguments.size() < 1) {
             throw new IllegalArgumentException("Incorrect number of arguments.");
         }
 
@@ -103,7 +103,7 @@ public class QueryBookCommand implements Command {
             break;
 
         case "--all":
-            if(arguments.size() != 2) {
+            if(arguments.size() != 1) {
                 throw new IllegalArgumentException("Incorrect number of arguments.");
             }
             handleAllQuery();

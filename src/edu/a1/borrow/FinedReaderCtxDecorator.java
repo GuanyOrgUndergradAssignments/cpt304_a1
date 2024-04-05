@@ -17,7 +17,7 @@ import edu.a1.system.context.reader.ReaderCtxDecorator;
 /**
  * Precondition:
  *  A reader with unpaid fines is logged in.
- * @author Guanyuming He, Kemu Xu
+ * @author Kemu Xu
  */
 public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
     NormalReaderContext normalReaderContext;

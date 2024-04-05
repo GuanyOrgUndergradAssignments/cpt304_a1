@@ -10,7 +10,7 @@ import java.util.List;
  * Decorates the reader context to add more responsibilities/behaviours 
  * to borrowBook and returnBook
  * 
- * @author Guanyuming He, Kemu Xu
+ * @author Kemu Xu
  */
 public abstract class ReaderCtxDecorator implements ReaderContext {
     private ReaderContext wrapped;
