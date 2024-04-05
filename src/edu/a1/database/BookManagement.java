@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.a1.book.Book;
+import edu.a1.borrow.Borrow;
+import edu.a1.system.IOInteraction;
+import edu.a1.system.LibrarySystem;
 
 public class BookManagement implements BookManager {
     private List<Book> books;
@@ -25,7 +28,7 @@ public class BookManagement implements BookManager {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
             outputStream.writeObject(books);
-            System.out.println("Books saved successfully.");
+            LibrarySystem.getIO().writeTo("Books saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,9 +39,9 @@ public class BookManagement implements BookManager {
     public void loadBooks(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             books = (List<Book>) inputStream.readObject();
-            System.out.println("Books loaded successfully.");
+            LibrarySystem.getIO().writeTo("Books loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("No previous data found.");
+            LibrarySystem.getIO().writeTo("No previous data found.");
         }
     }
 
@@ -47,9 +50,9 @@ public class BookManagement implements BookManager {
     public void save(Book book) {
         if (!existBook(book.getISBN())) {
             books.add(book);
-            System.out.println("Book added successfully.");
+            LibrarySystem.getIO().writeTo("Book added successfully.");
         } else {
-            System.out.println("Book with the same ISBN already exists. Cannot add.");
+            LibrarySystem.getIO().writeTo("Book with the same ISBN already exists. Cannot add.");
         }
     }
 
@@ -58,25 +61,38 @@ public class BookManagement implements BookManager {
     public void delete(Book book) {
         if (books.contains(book)) {
             books.remove(book);
-            System.out.println("Book deleted successfully.");
+            LibrarySystem.getIO().writeTo("Book deleted successfully.");
         } else {
-            System.out.println("Book not found. Cannot delete.");
+            LibrarySystem.getIO().writeTo("Book not found. Cannot delete.");
         }
     }
     
 
     // replace
-    @Override
+/*    @Override
     public void replace(Book originalBook, Book newBook) {
         if (existBook(newBook.getISBN())) {
-            System.out.println("New book has the same ISBN as an existing book. Cannot replace.");
+            LibrarySystem.getIO().writeTo("New book has the same ISBN as an existing book. Cannot replace.");
         } else {
             int index = books.indexOf(originalBook);
             if (index != -1) {
                 books.set(index, newBook);
-                System.out.println("Book replaced successfully.");
+                LibrarySystem.getIO().writeTo("Book replaced successfully.");
             } else {
-                System.out.println("Original book not found. Cannot replace.");
+                LibrarySystem.getIO().writeTo("Original book not found. Cannot replace.");
+            }
+        }
+    }*/
+
+    @Override
+    public void replace(Book originalBook, Book newBook) {
+        if (!existBook(originalBook.getISBN())) {
+            LibrarySystem.getIO().writeTo("Original book does not exist. Cannot replace.");
+        } else {
+            int index = books.indexOf(originalBook);
+            if (index != -1) {
+                books.set(index, newBook);
+                LibrarySystem.getIO().writeTo("Book replaced successfully.");
             }
         }
     }

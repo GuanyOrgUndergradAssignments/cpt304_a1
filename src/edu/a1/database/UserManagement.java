@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.a1.system.IOInteraction;
+import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 
 public class UserManagement implements UserManager{
@@ -24,7 +26,7 @@ public class UserManagement implements UserManager{
     public void saveUsers(String fileName) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(users);
-            System.out.println("Users saved successfully.");
+            LibrarySystem.getIO().writeTo("Users saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,9 +37,9 @@ public class UserManagement implements UserManager{
     public void loadUsers(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             users = (List<User>) inputStream.readObject();
-            System.out.println("Users loaded successfully.");
+            LibrarySystem.getIO().writeTo("Users loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("No previous data found.");
+            LibrarySystem.getIO().writeTo("No previous data found.");
         }
     }
 
@@ -46,9 +48,9 @@ public class UserManagement implements UserManager{
     public void save(User user) {
         if (!existUser(user.getUsername())) {
             users.add(user);
-            System.out.println("User added successfully.");
+            LibrarySystem.getIO().writeTo("User added successfully.");
         } else {
-            System.out.println("User with the same username already exists. Cannot add.");
+            LibrarySystem.getIO().writeTo("User with the same username already exists. Cannot add.");
         }
     }
 
@@ -56,26 +58,40 @@ public class UserManagement implements UserManager{
     public void delete(User user) {
         if (users.contains(user)) {
             users.remove(user);
-            System.out.println("User deleted successfully.");
+            LibrarySystem.getIO().writeTo("User deleted successfully.");
         } else {
-            System.out.println("User not found. Cannot delete.");
+            LibrarySystem.getIO().writeTo("User not found. Cannot delete.");
         }
     }
 
-    @Override
+/*    @Override
     public void replace(User originalUser, User newUser) {
         if (existUser(newUser.getUsername())) {
-            System.out.println("New user has the same username as an existing user. Cannot replace.");
+            LibrarySystem.getIO().writeTo("New user has the same username as an existing user. Cannot replace.");
         } else {
             int index = users.indexOf(originalUser);
             if (index != -1) {
                 users.set(index, newUser);
-                System.out.println("User replaced successfully.");
+                LibrarySystem.getIO().writeTo("User replaced successfully.");
             } else {
-                System.out.println("Original user not found. Cannot replace.");
+                LibrarySystem.getIO().writeTo("Original user not found. Cannot replace.");
+            }
+        }
+    }*/
+
+    @Override
+    public void replace(User originalUser, User newUser) {
+        if (!existUser(originalUser.getUsername())) {
+            LibrarySystem.getIO().writeTo("Original user does not exist. Cannot replace.");
+        } else {
+            int index = users.indexOf(originalUser);
+            if (index != -1) {
+                users.set(index, newUser);
+                LibrarySystem.getIO().writeTo("User replaced successfully.");
             }
         }
     }
+
 
     // get all users
     @Override

@@ -200,8 +200,9 @@ public class TestAdminManCmd {
         assertThrows(IllegalArgumentException.class, () -> inputCommand("admin-man --list user 12345"));
 
         // now there are no users except the admin
-        // first drain the command output buffer
+
         var outBuffer = ((IOInteractionForTests)LibrarySystem.getIO()).myOwnedBuffer;
+        // first drain the command output buffer
         outBuffer.delete(0, outBuffer.length());
         // now execute the command
         inputCommand("admin-man --list user");
@@ -211,6 +212,8 @@ public class TestAdminManCmd {
         // now add some user
         User newUsr = new User("abc", "123456");
         usrDB.save(newUsr);
+        // first drain the command output buffer
+        outBuffer.delete(0, outBuffer.length());
         inputCommand("admin-man --list user");
         out = outBuffer.toString();
         assertEquals("admin\nabc\nAdministrative operation completed successfully.\n", out);
