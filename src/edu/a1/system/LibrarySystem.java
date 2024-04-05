@@ -95,9 +95,9 @@ public final class LibrarySystem {
 
         // create database interfaces
         {
-            bookStorage = new BookManagement();
-            borrowStorage = new BorrowManagement();
-            userStorage = new UserManagement();
+            bookStorage = new BookManagement(io);
+            borrowStorage = new BorrowManagement(io);
+            userStorage = new UserManagement(io);
         }
 
         // If there isn't an admin yet, create one with the default password
