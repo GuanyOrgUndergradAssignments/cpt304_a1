@@ -10,13 +10,12 @@ import java.util.List;
 
 import edu.a1.book.Book;
 import edu.a1.system.IOInteraction;
+import edu.a1.system.LibrarySystem;
 
 public class BookManagement implements BookManager {
     private List<Book> books;
-    private IOInteraction ioInteraction;
 
-    public BookManagement(IOInteraction ioInteraction) {
-        this.ioInteraction = ioInteraction;
+    public BookManagement() {
         books = new ArrayList<>();
         loadBooks("books.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveBooks("books.ser")));
@@ -28,7 +27,7 @@ public class BookManagement implements BookManager {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
             outputStream.writeObject(books);
-            ioInteraction.writeTo("Books saved successfully.");
+            LibrarySystem.getIO().writeTo("Books saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,9 +38,9 @@ public class BookManagement implements BookManager {
     public void loadBooks(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             books = (List<Book>) inputStream.readObject();
-            ioInteraction.writeTo("Books loaded successfully.");
+            LibrarySystem.getIO().writeTo("Books loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
-            ioInteraction.writeTo("No previous data found.");
+            LibrarySystem.getIO().writeTo("No previous data found.");
         }
     }
 
@@ -50,9 +49,9 @@ public class BookManagement implements BookManager {
     public void save(Book book) {
         if (!existBook(book.getISBN())) {
             books.add(book);
-            ioInteraction.writeTo("Book added successfully.");
+            LibrarySystem.getIO().writeTo("Book added successfully.");
         } else {
-            ioInteraction.writeTo("Book with the same ISBN already exists. Cannot add.");
+            LibrarySystem.getIO().writeTo("Book with the same ISBN already exists. Cannot add.");
         }
     }
 
@@ -61,9 +60,9 @@ public class BookManagement implements BookManager {
     public void delete(Book book) {
         if (books.contains(book)) {
             books.remove(book);
-            ioInteraction.writeTo("Book deleted successfully.");
+            LibrarySystem.getIO().writeTo("Book deleted successfully.");
         } else {
-            ioInteraction.writeTo("Book not found. Cannot delete.");
+            LibrarySystem.getIO().writeTo("Book not found. Cannot delete.");
         }
     }
     
@@ -72,14 +71,14 @@ public class BookManagement implements BookManager {
     @Override
     public void replace(Book originalBook, Book newBook) {
         if (existBook(newBook.getISBN())) {
-            ioInteraction.writeTo("New book has the same ISBN as an existing book. Cannot replace.");
+            LibrarySystem.getIO().writeTo("New book has the same ISBN as an existing book. Cannot replace.");
         } else {
             int index = books.indexOf(originalBook);
             if (index != -1) {
                 books.set(index, newBook);
-                ioInteraction.writeTo("Book replaced successfully.");
+                LibrarySystem.getIO().writeTo("Book replaced successfully.");
             } else {
-                ioInteraction.writeTo("Original book not found. Cannot replace.");
+                LibrarySystem.getIO().writeTo("Original book not found. Cannot replace.");
             }
         }
     }

@@ -10,13 +10,12 @@ import java.util.List;
 
 import edu.a1.borrow.Borrow;
 import edu.a1.system.IOInteraction;
+import edu.a1.system.LibrarySystem;
 
 public class BorrowManagement implements BorrowManager {
     private List<Borrow> records;
-    private IOInteraction ioInteraction;
 
-    public BorrowManagement(IOInteraction ioInteraction) {
-        this.ioInteraction = ioInteraction;
+    public BorrowManagement() {
         records = new ArrayList<>();
         loadRecords("records.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveRecords("records.ser")));
@@ -27,7 +26,7 @@ public class BorrowManagement implements BorrowManager {
     public void saveRecords(String fileName) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(records);
-            ioInteraction.writeTo("Records saved successfully.");
+            LibrarySystem.getIO().writeTo("Records saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,9 +37,9 @@ public class BorrowManagement implements BorrowManager {
     public void loadRecords(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             records = (List<Borrow>) inputStream.readObject();
-            ioInteraction.writeTo("Records saved successfully.");
+            LibrarySystem.getIO().writeTo("Records saved successfully.");
         } catch (IOException | ClassNotFoundException e) {
-            ioInteraction.writeTo("No previous data found.");
+            LibrarySystem.getIO().writeTo("No previous data found.");
         }
     }
 
@@ -49,9 +48,9 @@ public class BorrowManagement implements BorrowManager {
     public void save(Borrow borrow) {
         if (!existRecord(borrow.getBorrowID())) {
             records.add(borrow);
-            ioInteraction.writeTo("Record added successfully.");
+            LibrarySystem.getIO().writeTo("Record added successfully.");
         } else {
-            ioInteraction.writeTo("Record with the same borrow ID already exists. Cannot add.");
+            LibrarySystem.getIO().writeTo("Record with the same borrow ID already exists. Cannot add.");
         }
     }
 
@@ -60,9 +59,9 @@ public class BorrowManagement implements BorrowManager {
     public void delete(Borrow borrow) {
         if (records.contains(borrow)) {
             records.remove(borrow);
-            ioInteraction.writeTo("Record deleted successfully.");
+            LibrarySystem.getIO().writeTo("Record deleted successfully.");
         } else {
-            ioInteraction.writeTo("Record not found. Cannot delete.");
+            LibrarySystem.getIO().writeTo("Record not found. Cannot delete.");
         }
     }
 
@@ -70,14 +69,14 @@ public class BorrowManagement implements BorrowManager {
     @Override
     public void replace(Borrow originalBorrow, Borrow newBorrow) {
         if (existRecord(newBorrow.getBorrowID())) {
-            ioInteraction.writeTo("New record has the same borrow ID as an existing record. Cannot replace.");
+            LibrarySystem.getIO().writeTo("New record has the same borrow ID as an existing record. Cannot replace.");
         } else {
             int index = records.indexOf(originalBorrow);
             if (index != -1) {
                 records.set(index, newBorrow);
-                ioInteraction.writeTo("Record replaced successfully.");
+                LibrarySystem.getIO().writeTo("Record replaced successfully.");
             } else {
-                ioInteraction.writeTo("Original record not found. Cannot replace.");
+                LibrarySystem.getIO().writeTo("Original record not found. Cannot replace.");
             }
         }
     }

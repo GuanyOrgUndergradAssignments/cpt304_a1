@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.a1.system.IOInteraction;
+import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 
 public class UserManagement implements UserManager{
     private List<User> users;
-    private static  IOInteraction ioInteraction;
 
-    public UserManagement(IOInteraction ioInteraction) {
-        this.ioInteraction = ioInteraction;
+    public UserManagement() {
         users = new ArrayList<>();
         loadUsers("users.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveUsers("users.ser")));
@@ -27,7 +26,7 @@ public class UserManagement implements UserManager{
     public void saveUsers(String fileName) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(users);
-            ioInteraction.writeTo("Users saved successfully.");
+            LibrarySystem.getIO().writeTo("Users saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,9 +37,9 @@ public class UserManagement implements UserManager{
     public void loadUsers(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             users = (List<User>) inputStream.readObject();
-            ioInteraction.writeTo("Users loaded successfully.");
+            LibrarySystem.getIO().writeTo("Users loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
-            ioInteraction.writeTo("No previous data found.");
+            LibrarySystem.getIO().writeTo("No previous data found.");
         }
     }
 
@@ -49,9 +48,9 @@ public class UserManagement implements UserManager{
     public void save(User user) {
         if (!existUser(user.getUsername())) {
             users.add(user);
-            ioInteraction.writeTo("User added successfully.");
+            LibrarySystem.getIO().writeTo("User added successfully.");
         } else {
-            ioInteraction.writeTo("User with the same username already exists. Cannot add.");
+            LibrarySystem.getIO().writeTo("User with the same username already exists. Cannot add.");
         }
     }
 
@@ -59,23 +58,23 @@ public class UserManagement implements UserManager{
     public void delete(User user) {
         if (users.contains(user)) {
             users.remove(user);
-            ioInteraction.writeTo("User deleted successfully.");
+            LibrarySystem.getIO().writeTo("User deleted successfully.");
         } else {
-            ioInteraction.writeTo("User not found. Cannot delete.");
+            LibrarySystem.getIO().writeTo("User not found. Cannot delete.");
         }
     }
 
     @Override
     public void replace(User originalUser, User newUser) {
         if (existUser(newUser.getUsername())) {
-            ioInteraction.writeTo("New user has the same username as an existing user. Cannot replace.");
+            LibrarySystem.getIO().writeTo("New user has the same username as an existing user. Cannot replace.");
         } else {
             int index = users.indexOf(originalUser);
             if (index != -1) {
                 users.set(index, newUser);
-                ioInteraction.writeTo("User replaced successfully.");
+                LibrarySystem.getIO().writeTo("User replaced successfully.");
             } else {
-                ioInteraction.writeTo("Original user not found. Cannot replace.");
+                LibrarySystem.getIO().writeTo("Original user not found. Cannot replace.");
             }
         }
     }
