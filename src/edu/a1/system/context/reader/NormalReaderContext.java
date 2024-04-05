@@ -6,9 +6,8 @@ import java.util.List;
 
 import edu.a1.book.Book;
 import edu.a1.borrow.Borrow;
-import edu.a1.database.BookManagement;
-import edu.a1.database.BorrowManagement;
-import edu.a1.database.UserManagement;
+import edu.a1.database.*;
+import edu.a1.system.LibrarySystem;
 import edu.a1.system.User;
 
 /**
@@ -20,19 +19,19 @@ public class NormalReaderContext implements ReaderContext  {
 
     protected final List<Borrow> borrowHistory;
     private User reader;
-    UserManagement userStorage;
-    BookManagement bookStorage;
-    BorrowManagement borrowStorage;
+    UserManager userStorage;
+    BookManager bookStorage;
+    BorrowManager borrowStorage;
 
     /**
      * @param history loaded by the system from the database.
      */
     public NormalReaderContext(List<Borrow> history) {
         this.borrowHistory = history;
-        userStorage = new UserManagement();
-        bookStorage = new BookManagement();
-        borrowStorage = new BorrowManagement();
-        reader = userStorage.findByUsername(history.get(0).getUsername());
+        userStorage = LibrarySystem.userStorage;
+        bookStorage = LibrarySystem.bookStorage;
+        borrowStorage = LibrarySystem.borrowStorage;
+        reader = LibrarySystem.authenticator.getLoggedInUser();
     }
 
     public User getReader() {
@@ -43,15 +42,15 @@ public class NormalReaderContext implements ReaderContext  {
         return borrowHistory;
     }
 
-    public UserManagement getUserStorage() {
+    public UserManager getUserStorage() {
         return userStorage;
     }
 
-    public BookManagement getBookStorage() {
+    public BookManager getBookStorage() {
         return bookStorage;
     }
 
-    public BorrowManagement getBorrowStorage() {
+    public BorrowManager getBorrowStorage() {
         return borrowStorage;
     }
 
@@ -108,8 +107,6 @@ public class NormalReaderContext implements ReaderContext  {
      */
     @Override
     public void returnBook(Book book, int numCopies) {
-        List<Borrow> borrowHistory = borrowStorage.findByISBN(book.getISBN());
-
         // check the user's borrow history includes the book
         if(borrowHistory.isEmpty()){
             System.out.println("no borrow history");

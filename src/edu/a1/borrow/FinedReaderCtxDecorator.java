@@ -65,17 +65,21 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
             super.returnBook(book, numCopies);
         }else{
             LibrarySystem.getIO().writeTo("You have to pay all fines before return books. yes/no");
-            while(LibrarySystem.getIO().readLineFrom().equals("yes") && LibrarySystem.getIO().readLineFrom().equals("no")){
-                String cmdLine = LibrarySystem.getIO().readLineFrom();
-                if (cmdLine.equals("yes")){
+            var input = LibrarySystem.getIO().readLineFrom();
+            while (!input.equals("yes") && !input.equals("no")){
+                LibrarySystem.getIO().writeTo("The command is incorrect, please type yes/no.");
+            }
+            switch (input){
+                case "yes":{
                     payFine(unpaidBorrows);
                     LibrarySystem.getIO().writeTo("You have paid fines.");
                     super.returnBook(book, numCopies);
                     LibrarySystem.getIO().writeTo("You have returned borrowed book.");
-                }else if (cmdLine.equals("no")){
+                    break;
+                }
+                case "no":{
                     LibrarySystem.getIO().writeTo("Return failed. You have to pay all fines before return books.");
-                }else{
-                    LibrarySystem.getIO().writeTo("The command is incorrent, please type yes/no.");
+                    break;
                 }
             }
         }
