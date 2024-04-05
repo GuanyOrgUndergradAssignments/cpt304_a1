@@ -1,6 +1,7 @@
 package edu.a1.borrow;
 import edu.a1.database.BorrowManagement;
 import edu.a1.database.BorrowManager;
+import edu.a1.system.LibrarySystem;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -28,19 +29,21 @@ public class Borrow implements Serializable {
     // calculated whenever used.
     private float fine;
     private final float FINEPERDAY = 0.5f;
-    private final int BORROWDAY = 30;
 
-    private BorrowManagement borrowManagement;
+    private BorrowManager borrowStorage;
 
     /**
      * SQL needs the default ctor.
      */
     public Borrow(String username, String ISBN, int numBorrowed, Date declaredReturnDate) {
-        borrowManagement = new BorrowManagement();
+        borrowStorage = LibrarySystem.borrowStorage;
         // set ID
-        int maxID = Integer.MIN_VALUE;
+        int maxID = 0;
 
-        for (Borrow borrow : borrowManagement.findAll()) {
+        // Unless calculated, this will always be 0.0f
+        this.fine = 0.0f;
+
+        for (Borrow borrow : borrowStorage.findAll()) {
             int currentID = borrow.getBorrowID();
             if (currentID > maxID) {
                 maxID = currentID;
@@ -68,37 +71,31 @@ public class Borrow implements Serializable {
      * If the system decides that the fine is paid, then call this.
      */
     public void payFine() {
-        setReturnedDate(Date.from(Instant.now()));
-        calculateFine();
         finePaid = true;
     }
 
     /**
      * After a Borrow is loaded from database,
-     * call this to calcualte the fine.
+     * call this to calculate the fine.
      * 
      * If no fine is needed, then fine := 0.0f.
      */
     public void calculateFine() {
         // check the existence of return day
-        if(returnedDate == null) {
-            returnedDate = Date.from(Instant.now());
+        if(returnedDate != null) {
+            // fine by day
+            if(ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) > 0){
+                fine = ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) * FINEPERDAY;
+            }else{
+                fine = 0.0f;
+            }
         }
-
-        // fine by day
-        if(ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) > 0){
-            fine = ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) * FINEPERDAY;
-        }else{
-            fine = 0;
-        }
-
     }
     public float getFine() {
         return fine;
     }
     /** @return if fine != 0.0f */
     public boolean isFined() {
-        calculateFine();
         return getFine() != 0.0f;
     }
 
