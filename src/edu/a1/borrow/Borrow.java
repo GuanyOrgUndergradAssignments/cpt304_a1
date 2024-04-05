@@ -29,7 +29,6 @@ public class Borrow implements Serializable {
     // calculated whenever used.
     private float fine;
     private final float FINEPERDAY = 0.5f;
-    private final int BORROWDAY = 30;
 
     private BorrowManager borrowStorage;
 
@@ -40,6 +39,9 @@ public class Borrow implements Serializable {
         borrowStorage = LibrarySystem.borrowStorage;
         // set ID
         int maxID = 0;
+
+        // Unless calculated, this will always be 0.0f
+        this.fine = 0.0f;
 
         for (Borrow borrow : borrowStorage.findAll()) {
             int currentID = borrow.getBorrowID();
@@ -85,7 +87,7 @@ public class Borrow implements Serializable {
             if(ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) > 0){
                 fine = ChronoUnit.DAYS.between(declaredReturnDate.toInstant(), returnedDate.toInstant()) * FINEPERDAY;
             }else{
-                fine = 0;
+                fine = 0.0f;
             }
         }
     }

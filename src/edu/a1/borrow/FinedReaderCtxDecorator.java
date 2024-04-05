@@ -34,8 +34,7 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
         borrowHistory = normalReaderContext.getBorrowHistory();
 
         // TODO: find unpaid borrows
-        unpaidBorrows = new ArrayList<>();
-        getUnpaidBorrows();
+        determineUnpaidBorrows();
     }
 
     /**
@@ -64,7 +63,7 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
         if (unpaidBorrows.isEmpty()){
             super.returnBook(book, numCopies);
         }else{
-            LibrarySystem.getIO().writeTo("You have to pay all fines before return books. yes/no");
+            LibrarySystem.getIO().writeTo("You have to pay all fines before return books. Pay now? yes/no");
             var input = LibrarySystem.getIO().readLineFrom();
             while (!input.equals("yes") && !input.equals("no")){
                 LibrarySystem.getIO().writeTo("The command is incorrect, please type yes/no.");
@@ -89,12 +88,27 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
         for (Borrow borrow : finedBorrows){
             borrow.payFine();
         }
-        getUnpaidBorrows();
+
+        // update unpaid recording
+        determineUnpaidBorrows();
+        // the reader paid all, so it should be empty after the update
+        assert(unpaidBorrows.isEmpty());
     }
 
-    public void getUnpaidBorrows(){
+    /**
+     * find all unpaid borrows and make unpaidBorrows contain only them.
+     */
+    public void determineUnpaidBorrows(){
+
+        if(unpaidBorrows == null) {
+            unpaidBorrows = new ArrayList<>();
+        }
+        else {
+            unpaidBorrows.clear();
+        }
+
         for(Borrow borrow : borrowHistory){
-            if (!borrow.getFinePaid() && borrow.getFine() != 0){
+            if (borrow.isFined() && !borrow.getFinePaid()){
                 unpaidBorrows.add(borrow);
             }
         }
