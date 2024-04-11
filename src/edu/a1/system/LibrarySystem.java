@@ -220,6 +220,24 @@ public final class LibrarySystem {
 
         assert(ioInteraction != null);
 
+        // print the welcome message
+        {
+            StringBuilder welcomeMsgBuilder = new StringBuilder("");
+            welcomeMsgBuilder.append("Welcome to the Library Management System\n that is developed by Group 14.\n");
+            welcomeMsgBuilder.append("Authors:\n");
+            welcomeMsgBuilder.append("\tBrosnan Liew\n");
+            welcomeMsgBuilder.append("\tGuanyuming He\n");
+            welcomeMsgBuilder.append("\tHanyu Zhang\n");
+            welcomeMsgBuilder.append("\tKemu Xu\n");
+            welcomeMsgBuilder.append("Commands are listed below.\n For how to use them, execute <command-name> --help.\n");
+            for(var cmdName : commands.keySet()) {
+                welcomeMsgBuilder.append("\t");
+                welcomeMsgBuilder.append(cmdName);
+                welcomeMsgBuilder.append("\n");
+            }
+            ioInteraction.writeTo(welcomeMsgBuilder.toString());
+        }
+
         while(!exit) {
             // Errors from commands are reported as exceptions.
             // print error messages to the console.

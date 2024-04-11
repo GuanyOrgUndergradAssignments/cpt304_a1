@@ -260,9 +260,9 @@ public class AdminManCommand implements Command {
             name + " [OPTIONS]",
             "Manages the library system as admin.", 
             List.of(
-                "--rm user <usrname>\n" +
+                "--rm user <usrname>: removes a user\n" +
                     "\t\t <usrname>: name of the user",
-                "--rm book <isbn>\n" +
+                "--rm book <isbn>: removes a book\n" +
                     "\t\t <isbn>: ISBN of the book",
                 "--add user <usrname> <pwd>\n" +
                     "\t\t <usrname>: username\n" +
@@ -274,7 +274,7 @@ public class AdminManCommand implements Command {
                     "\t\t <name>: book name\n" +
                     "\t\t <year>: published year\n" +
                     "\t\t <cat>: category\n" +
-                    "\t\t <price>: retail price\n",
+                    "\t\t <price>: retail price",
                 "--list user\n" +
                     "\t\tLists all usernames"
             ), 

@@ -40,7 +40,7 @@ public interface Command {
         
         assert(usage != null && effect != null && options != null && parameters != null);
 
-        String ret = "Usage: ";
+        String ret = "";
 
         // usage
         ret += "Usage: " + usage + "\n";
