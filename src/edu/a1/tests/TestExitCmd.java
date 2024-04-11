@@ -20,7 +20,7 @@ public class TestExitCmd {
     public void testHelpMessage() {
         ExitCommand exitCommand = new ExitCommand();
 
-        String expectedHelpMessage = "Usage: Usage: exit\n" +
+        String expectedHelpMessage = "Usage: exit\n" +
                 "Effect: exits the system\n" +
                 "Options: \n" +
                 "\t --help: displays the help message.\n";

@@ -16,7 +16,15 @@ import edu.a1.system.LibrarySystem;
 public class BookManagement implements BookManager {
     private List<Book> books;
 
-    public BookManagement() {
+    private static BookManagement instance = null;
+    public static BookManagement getInstance() {
+        if(instance == null) {
+            instance = new BookManagement();
+        }
+        return instance;
+    }
+
+    private BookManagement() {
         books = new ArrayList<>();
         loadBooks("books.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveBooks("books.ser")));

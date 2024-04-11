@@ -42,7 +42,7 @@ public class TestLogoutCmd {
     public void testHelpMessage() {
         LogoutCommand logoutCommand = new LogoutCommand();
 
-        String expectedHelpMessage = "Usage: Usage: logout\n"
+        String expectedHelpMessage = "Usage: logout\n"
                 + "Effect: log out the currently logged in user.\n"
                 + "Options: \n"
                 + "\t --help: displays the help message.\n";

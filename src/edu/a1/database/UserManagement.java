@@ -15,7 +15,15 @@ import edu.a1.system.User;
 public class UserManagement implements UserManager{
     private List<User> users;
 
-    public UserManagement() {
+    private static UserManagement instance = null;
+    public static UserManagement getInstance() {
+        if(instance == null) {
+            instance = new UserManagement();
+        }
+        return instance;
+    }
+
+    private UserManagement() {
         users = new ArrayList<>();
         loadUsers("users.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveUsers("users.ser")));

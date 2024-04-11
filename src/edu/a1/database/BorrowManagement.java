@@ -16,7 +16,15 @@ import edu.a1.system.User;
 public class BorrowManagement implements BorrowManager {
     private List<Borrow> records;
 
-    public BorrowManagement() {
+    private static BorrowManagement instance = null;
+    public static BorrowManagement getInstance() {
+        if(instance == null) {
+            instance = new BorrowManagement();
+        }
+        return instance;
+    }
+
+    private BorrowManagement() {
         records = new ArrayList<>();
         loadRecords("records.ser");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> saveRecords("records.ser")));

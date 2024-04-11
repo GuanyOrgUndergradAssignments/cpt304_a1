@@ -48,7 +48,7 @@ public class TestLoginCmd {
     public void testHelpMessage() {
         LoginCommand loginCommand = new LoginCommand();
 
-        String expectedHelpMessage = "Usage: Usage: login USERNAME PASSWORD\n" +
+        String expectedHelpMessage = "Usage: login USERNAME PASSWORD\n" +
                 "Effect: log in the user with USERNAME\n" +
                 "Options: \n" +
                 "\t --help: displays the help message.\n" +
