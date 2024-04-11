@@ -48,7 +48,13 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
         if(unpaidBorrows.isEmpty()){
             super.borrowBook(book, numCopies, declaredReturnDate);
         }else{
-            System.out.println("you have to pay all fines before borrow books");
+            Boolean agreePayingFine = askPayFine();
+            if (agreePayingFine){
+                super.borrowBook(book, numCopies, declaredReturnDate);
+                LibrarySystem.getIO().writeTo("You have borrowed book.");
+            }else{
+                LibrarySystem.getIO().writeTo("Failed to borrow book because you refuse to pay all fines.");
+            }
         }
     }
 
@@ -63,25 +69,34 @@ public class FinedReaderCtxDecorator extends ReaderCtxDecorator {
         if (unpaidBorrows.isEmpty()){
             super.returnBook(book, numCopies);
         }else{
-            LibrarySystem.getIO().writeTo("You have to pay all fines before return books. Pay now? yes/no");
-            var input = LibrarySystem.getIO().readLineFrom();
-            while (!input.equals("yes") && !input.equals("no")){
-                LibrarySystem.getIO().writeTo("The command is incorrect, please type yes/no.");
-            }
-            switch (input){
-                case "yes":{
-                    payFine(unpaidBorrows);
-                    LibrarySystem.getIO().writeTo("You have paid fines.");
-                    super.returnBook(book, numCopies);
-                    LibrarySystem.getIO().writeTo("You have returned borrowed book.");
-                    break;
-                }
-                case "no":{
-                    LibrarySystem.getIO().writeTo("Return failed. You have to pay all fines before return books.");
-                    break;
-                }
+            Boolean agreePayingFine = askPayFine();
+            if (agreePayingFine){
+                super.returnBook(book, numCopies);
+                LibrarySystem.getIO().writeTo("You have returned borrowed book.");
+            }else{
+                LibrarySystem.getIO().writeTo("Failed to return borrowed book because you refuse to pay all fines.");
             }
         }
+    }
+
+    private Boolean askPayFine(){
+        LibrarySystem.getIO().writeTo("You have to pay all fines before return books. Pay now? yes/no");
+        var input = LibrarySystem.getIO().readLineFrom();
+        while (!input.equals("yes") && !input.equals("no")){
+            LibrarySystem.getIO().writeTo("The command is incorrect, please type yes/no.");
+        }
+        switch (input){
+            case "yes":{
+                payFine(unpaidBorrows);
+                LibrarySystem.getIO().writeTo("You have paid fines.");
+                return true;
+            }
+            case "no":{
+                LibrarySystem.getIO().writeTo("You have to pay all fines before borrowing/returning books.");
+                return false;
+            }
+        }
+        return null;
     }
 
     public void payFine(List<Borrow> finedBorrows){
